@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Banking System</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .view {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+        .form-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .form-card {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 280px;
+        }
+        form div {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .button-primary { background-color: #3498db; }
+        .button-success { background-color: #2ecc71; }
+        .button-danger { background-color: #e74c3c; }
+        .button-info { background-color: #f39c12; }
+        .button-neutral { background-color: #95a5a6; }
+
+        .result-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+        .result-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .result-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        p {
+            margin: 0;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        #accountList {
+            margin-top: 2rem;
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+        }
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            background-color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login View -->
+        <div id="loginView" class="view">
+            <h2>Welcome </h2>
+            <div class="form-section">
+                <div class="form-card">
+                    <h2>Login</h2>
+                    <form id="loginForm">
+                        <div>
+                            <label for="loginUsername">Username:</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div>
+                            <label for="loginPassword">Password:</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="button-primary">Login</button>
+                    </form>
+                    <div id="loginResult" class="result-message"></div>
+                </div>
+
+                <div class="form-card">
+                    <h2>Register</h2>
+                    <form id="registerForm">
+                        <div>
+                            <label for="regUsername">Username:</label>
+                            <input type="text" id="regUsername" required>
+                        </div>
+                        <div>
+                            <label for="regEmail">Email:</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div>
+                            <label for="regPassword">Password:</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <button type="submit" class="button-success">Register</button>
+                    </form>
+                    <div id="registerResult" class="result-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboardView" class="view hidden">
+            <div class="dashboard-header">
+                <h2 id="welcomeMessage"></h2>
+                <button id="logoutButton" class="button-danger">Logout</button>
+            </div>
+            
+            <div class="form-section">
+                 <div class="form-card">
+                    <h2>Create New Account</h2>
+                    <form id="createAccountForm">
+                        <div>
+                            <label for="accountType">Account Type:</label>
+                            <select id="accountType" required>
+                                <option value="Savings">Savings</option>
+                                <option value="Credit">Credit</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="button-primary">Create Account</button>
+                    </form>
+                    <div id="createAccountResult" class="result-message"></div>
+                </div>
+            </div>
+
+            <div id="accountList">
+                <h3>Your Accounts</h3>
+                <div id="accountsPlaceholder">
+                    <p>No accounts found. Create one above!</p>
+                </div>
+            </div>
+
+            <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+
+            <div class="form-section">
+                <div class="form-card">
+                    <h2>Deposit / Withdraw</h2>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Deposit Form -->
+                        <div style="flex: 1;">
+                            <h3>Deposit</h3>
+                            <form id="depositForm">
+                                <div>
+                                    <label for="depositAccountNumber">Account Number:</label>
+                                    <input type="text" id="depositAccountNumber" required>
+                                </div>
+                                <div>
+                                    <label for="depositAmount">Amount:</label>
+                                    <input type="number" id="depositAmount" required min="1">
+                                </div>
+                                <button type="submit" class="button-success">Deposit</button>
+                            </form>
+                            <div id="depositResult" class="result-message"></div>
+                        </div>
+
+                        <!-- Withdraw Form -->
+                        <div style="flex: 1;">
+                            <h3>Withdraw</h3>
+                            <form id="withdrawForm">
+                                <div>
+                                    <label for="withdrawAccountNumber">Account Number:</label>
+                                    <input type="text" id="withdrawAccountNumber" required>
+                                </div>
+                                <div>
+                                    <label for="withdrawAmount">Amount:</label>
+                                    <input type="number" id="withdrawAmount" required min="1">
+                                </div>
+                                <button type="submit" class="button-info">Withdraw</button>
+                            </form>
+                            <div id="withdrawResult" class="result-message"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <h2>Transfer Funds</h2>
+                    <form id="transferForm">
+                        <div>
+                            <label for="transferSourceAccountNumber">Source Account Number:</label>
+                            <input type="text" id="transferSourceAccountNumber" required>
+                        </div>
+                        <div>
+                            <label for="transferDestinationAccountNumber">Destination Account Number:</label>
+                            <input type="text" id="transferDestinationAccountNumber" required>
+                        </div>
+                        <div>
+                            <label for="transferAmount">Amount:</label>
+                            <input type="number" id="transferAmount" required min="1">
+                        </div>
+                        <button type="submit" class="button-neutral">Transfer</button>
+                    </form>
+                    <div id="transferResult" class="result-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Store logged in user's information
+        let loggedInUser = null;
+
+        // --- DOM ELEMENTS ---
+        const loginView = document.getElementById('loginView');
+        const dashboardView = document.getElementById('dashboardView');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const accountListElement = document.getElementById('accountList');
+
+        // --- HELPER FUNCTIONS ---
+        function handleFormResult(resultDivId, isSuccess, message, details = {}) {
+            const resultDiv = document.getElementById(resultDivId);
+            let content;
+
+            if (isSuccess) {
+                resultDiv.classList.remove('error');
+                resultDiv.classList.add('success');
+                content = `<p><strong>Success:</strong> ${message}</p>`;
+                if (details.accountNumber) content += `<p>Account Number: ${details.accountNumber}</p>`;
+                if (details.username) content += `<p>Username: ${details.username}</p>`;
+            } else {
+                resultDiv.classList.remove('success');
+                resultDiv.classList.add('error');
+                content = `<p><strong>Error:</strong> ${message}</p>`;
+            }
+            resultDiv.innerHTML = content;
+        }
+
+        function showDashboard(user) {
+            loggedInUser = user;
+            welcomeMessage.textContent = `Welcome, ${loggedInUser.username}`;
+            renderAccounts(loggedInUser.accounts);
+            loginView.classList.add('hidden');
+            dashboardView.classList.remove('hidden');
+        }
+
+        function showLogin() {
+            loggedInUser = null;
+            loginView.classList.remove('hidden');
+            dashboardView.classList.add('hidden');
+        }
+
+        function renderAccounts(accounts) {
+            accountListElement.innerHTML = '<h3>Your Accounts</h3>';
+            if (!accounts || accounts.length === 0) {
+                accountListElement.innerHTML += '<p>No accounts found. Create one above!</p>';
+            } else {
+                accounts.forEach(account => {
+                    const accountItem = document.createElement('div');
+                    accountItem.className = 'account-item';
+                    accountItem.innerHTML = `
+                        <div>
+                            <strong>Type:</strong> ${account.accountType}
+                        </div>
+                        <div>
+                            <strong>Account #:</strong> ${account.accountNumber}
+                        </div>
+                        <div>
+                            <strong>Balance:</strong> R${account.balance.toFixed(2)}
+                        </div>
+                    `;
+                    accountListElement.appendChild(accountItem);
+                });
+            }
+        }
+
+        // --- EVENT LISTENERS FOR FORMS AND BUTTONS ---
+
+        // Register form handler
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const response = await fetch('http://localhost:8080/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    handleFormResult('registerResult', true, result.message, { username: result.username });
+                } else {
+                    handleFormResult('registerResult', false, result.error);
+                }
+            } catch (error) {
+                handleFormResult('registerResult', false, 'Network Error. Check if server is running.');
+            }
+        });
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('http://localhost:8080/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    showDashboard(result.user);
+                    handleFormResult('loginResult', true, 'Login successful!');
+                } else {
+                    handleFormResult('loginResult', false, result.error);
+                }
+            } catch (error) {
+                handleFormResult('loginResult', false, 'Network Error. Check if server is running.');
+            }
+        });
+
+        // Logout button handler
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            showLogin();
+            handleFormResult('loginResult', true, 'You have been logged out.');
+        });
+
+        // Create Account form handler
+        document.getElementById('createAccountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!loggedInUser) {
+                handleFormResult('createAccountResult', false, 'Please log in first.');
+                return;
+            }
+
+            const accountType = document.getElementById('accountType').value;
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/accounts/create?userId=${loggedInUser.id}&accountType=${accountType}`, {
+                    method: 'POST',
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    // Update user object with the new account
+                    loggedInUser.accounts.push({
+                        accountType: result.accountType,
+                        accountNumber: result.accountNumber,
+                        balance: 0
+                    });
+                    renderAccounts(loggedInUser.accounts);
+                    handleFormResult('createAccountResult', true, 'Account created successfully!', { accountNumber: result.accountNumber });
+                } else {
+                    handleFormResult('createAccountResult', false, result.error);
+                }
+            } catch (error) {
+                handleFormResult('createAccountResult', false, 'Network Error. Check if server is running.');
+            }
+        });
+
+        // Deposit form handler
+        document.getElementById('depositForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const accountNumber = document.getElementById('depositAccountNumber').value;
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/accounts/deposit?accountNumber=${accountNumber}&amount=${amount}`, {
+                    method: 'POST',
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    // Find and update the account balance in the loggedInUser object
+                    const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
+                    if (account) {
+                        account.balance += amount;
+                        renderAccounts(loggedInUser.accounts);
+                    }
+                    handleFormResult('depositResult', true, 'Deposit successful!');
+                } else {
+                    handleFormResult('depositResult', false, result.error);
+                }
+            } catch (error) {
+                handleFormResult('depositResult', false, 'Network Error. Check if server is running.');
+            }
+        });
+
+        // Withdraw form handler
+        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const accountNumber = document.getElementById('withdrawAccountNumber').value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/accounts/withdraw?accountNumber=${accountNumber}&amount=${amount}`, {
+                    method: 'POST',
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
+                    if (account) {
+                        account.balance -= amount;
+                        renderAccounts(loggedInUser.accounts);
+                    }
+                    handleFormResult('withdrawResult', true, 'Withdrawal successful!');
+                } else {
+                    handleFormResult('withdrawResult', false, result.error);
+                }
+            } catch (error) {
+                handleFormResult('withdrawResult', false, 'Network Error. Check if server is running.');
+            }
+        });
+
+        // Transfer form handler
+        document.getElementById('transferForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const sourceAccountNumber = document.getElementById('transferSourceAccountNumber').value;
+            const destinationAccountNumber = document.getElementById('transferDestinationAccountNumber').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/accounts/transfer?sourceAccountNumber=${sourceAccountNumber}&destinationAccountNumber=${destinationAccountNumber}&amount=${amount}`, {
+                    method: 'POST',
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    const sourceAccount = loggedInUser.accounts.find(acc => acc.accountNumber === sourceAccountNumber);
+                    const destinationAccount = loggedInUser.accounts.find(acc => acc.accountNumber === destinationAccountNumber);
+                    if (sourceAccount) {
+                        sourceAccount.balance -= amount;
+                    }
+                    if (destinationAccount) {
+                        // NOTE: This part won't update the balance in the UI correctly if the destination account is not the logged-in user's
+                        // The backend handles the actual transfer, but the UI only updates if it can find the destination account in the local loggedInUser object.
+                        // For a full-featured app, we would re-fetch user data after a transfer.
+                        destinationAccount.balance += amount; 
+                    }
+                    renderAccounts(loggedInUser.accounts);
+                    handleFormResult('transferResult', true, 'Transfer successful!');
+                } else {
+                    handleFormResult('transferResult', false, result.error);
+                }
+            } catch (error) {
+                handleFormResult('transferResult', false, 'Network Error. Check if server is running.');
+            }
+        });
+
+        // Initial view setup
+        showLogin();
+    </script>
+</body>
+</html>
