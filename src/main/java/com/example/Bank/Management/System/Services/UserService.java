@@ -5,6 +5,8 @@ import com.example.Bank.Management.System.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
@@ -16,6 +18,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Transactional
     public User registerUser(User user) {
         // Check if user already exists
         if (userRepository.existsByUsername(user.getUsername())) {

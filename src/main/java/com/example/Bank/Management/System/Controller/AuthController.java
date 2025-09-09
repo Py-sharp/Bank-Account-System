@@ -6,9 +6,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,12 +38,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-        boolean isValid = userService.validateUser(loginRequest.getUsername(), loginRequest.getPassword());
+        Optional<User> userOpt = userService.findByUsername(loginRequest.getUsername());
 
-        if (isValid) {
-            Map<String, String> response = new HashMap<>();
+        if (userOpt.isPresent() && userService.validateUser(loginRequest.getUsername(), loginRequest.getPassword())) {
+            User user = userOpt.get();
+            Map<String, Object> response = new HashMap<>();
             response.put("message", "Login successful");
-            response.put("username", loginRequest.getUsername());
+            response.put("user", user); // Return the full user object, including accounts
             return ResponseEntity.ok(response);
         } else {
             Map<String, String> error = new HashMap<>();

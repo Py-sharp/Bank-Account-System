@@ -1,17 +1,15 @@
-// src/main/java/com/example/Bank/Management/System/Services/AccountService.java
-
 package com.example.Bank.Management.System.Services;
 
 import com.example.Bank.Management.System.Entity.Account;
-import com.example.Bank.Management.System.Entity.Transaction;
+import com.example.Bank.Management.System.Entity.User;
 import com.example.Bank.Management.System.Repository.AccountRepository;
-import com.example.Bank.Management.System.Repository.TransactionRepository;
+import com.example.Bank.Management.System.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Random;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -20,107 +18,75 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private UserRepository userRepository;
 
-    // Method to generate a unique 10-digit account number
-    private String generateUniqueAccountNumber() {
-        String accountNumber;
-        Random random = new Random();
-        do {
-            accountNumber = String.format("%010d", random.nextLong() % 10000000000L);
-        } while (accountRepository.existsByAccountNumber(accountNumber));
-        return accountNumber;
-    }
+    public Account createAccount(Long userId, String accountType) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // Method to create a new account for a user
-    public Account createAccount(Long userId) {
-        Account account = new Account();
-        account.setUserId(userId);
-        account.setAccountNumber(generateUniqueAccountNumber());
-        account.setBalance(0.0);
-        return accountRepository.save(account);
-    }
+        Account newAccount = new Account();
+        newAccount.setAccountType(accountType);
+        newAccount.setBalance(BigDecimal.ZERO);
+        newAccount.setUser(user);
 
-    // Helper method to save a transaction record
-    private void logTransaction(String accountNumber, double amount, String type, String relatedAccount) {
-        Transaction transaction = new Transaction();
-        transaction.setAccountNumber(accountNumber);
-        transaction.setAmount(amount);
-        transaction.setType(type);
-        transaction.setTimestamp(LocalDateTime.now());
-        transaction.setRelatedAccount(relatedAccount);
-        transactionRepository.save(transaction);
+        return accountRepository.save(newAccount);
     }
 
     @Transactional
-    public Account deposit(String accountNumber, double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be positive");
-        }
-
+    public void deposit(String accountNumber, BigDecimal amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        account.setBalance(account.getBalance() + amount);
-        Account updatedAccount = accountRepository.save(account);
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Amount must be a positive number");
+        }
 
-        logTransaction(accountNumber, amount, "CREDIT", null);
-
-        return updatedAccount;
+        account.setBalance(account.getBalance().add(amount));
+        accountRepository.save(account);
     }
 
     @Transactional
-    public Account withdraw(String accountNumber, double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Withdrawal amount must be positive");
-        }
-
+    public void withdraw(String accountNumber, BigDecimal amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        if (account.getBalance() < amount) {
-            throw new IllegalStateException("Insufficient funds");
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Amount must be a positive number");
         }
 
-        account.setBalance(account.getBalance() - amount);
-        Account updatedAccount = accountRepository.save(account);
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient funds");
+        }
 
-        logTransaction(accountNumber, amount, "DEBIT", null);
-
-        return updatedAccount;
+        account.setBalance(account.getBalance().subtract(amount));
+        accountRepository.save(account);
     }
 
-    // New method for transferring money between accounts
     @Transactional
-    public void transfer(String sourceAccountNumber, String destinationAccountNumber, double amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Transfer amount must be positive");
-        }
-
+    public void transfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
         if (sourceAccountNumber.equals(destinationAccountNumber)) {
-            throw new IllegalArgumentException("Source and destination accounts cannot be the same");
+            throw new RuntimeException("Source and destination accounts cannot be the same");
         }
 
-        // Debit the source account
         Account sourceAccount = accountRepository.findByAccountNumber(sourceAccountNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Source account not found"));
+                .orElseThrow(() -> new RuntimeException("Source account not found"));
 
-        if (sourceAccount.getBalance() < amount) {
-            throw new IllegalStateException("Insufficient funds in source account");
+        Account destinationAccount = accountRepository.findByAccountNumber(destinationAccountNumber)
+                .orElseThrow(() -> new RuntimeException("Destination account not found"));
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Amount must be a positive number");
         }
 
-        // Credit the destination account
-        Account destinationAccount = accountRepository.findByAccountNumber(destinationAccountNumber)
-                .orElseThrow(() -> new IllegalArgumentException("Destination account not found"));
+        if (sourceAccount.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient funds in source account");
+        }
 
-        sourceAccount.setBalance(sourceAccount.getBalance() - amount);
-        destinationAccount.setBalance(destinationAccount.getBalance() + amount);
+        // Perform the transfer
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
+        destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
 
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
-
-        // Log transactions for both debit and credit
-        logTransaction(sourceAccountNumber, amount, "DEBIT", destinationAccountNumber);
-        logTransaction(destinationAccountNumber, amount, "CREDIT", sourceAccountNumber);
     }
 }

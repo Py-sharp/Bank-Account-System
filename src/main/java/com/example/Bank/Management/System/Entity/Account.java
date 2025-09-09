@@ -1,23 +1,35 @@
 package com.example.Bank.Management.System.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(name = "accounts")
 public class Account {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String accountNumber;
 
-    @Column(nullable = false)
-    private Long userId; // Link to the User entity
+    private String accountType;
 
-    @Column(nullable = false)
-    private double balance;
+    private BigDecimal balance;
+
+    // Many-to-one relationship with the User entity.
+    // The 'user' field links each account to its owner.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference // Prevents infinite recursion in JSON serialization
+    private User user;
+
+    public Account() {
+        // Generate a unique account number upon creation
+        this.accountNumber = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -36,19 +48,27 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getAccountType() {
+        return accountType;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
