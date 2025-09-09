@@ -38,7 +38,6 @@ public class AccountController {
         }
     }
 
-    // New endpoint for deposits
     @PostMapping("/deposit")
     public ResponseEntity<?> deposit(@RequestBody TransactionRequest request) {
         try {
@@ -61,7 +60,6 @@ public class AccountController {
         }
     }
 
-    // New endpoint for withdrawals
     @PostMapping("/withdraw")
     public ResponseEntity<?> withdraw(@RequestBody TransactionRequest request) {
         try {
@@ -84,7 +82,30 @@ public class AccountController {
         }
     }
 
-    // Inner class to handle transaction requests
+    // New endpoint for transfers
+    @PostMapping("/transfer")
+    public ResponseEntity<?> transfer(@RequestBody TransferRequest request) {
+        try {
+            accountService.transfer(
+                    request.getSourceAccountNumber(),
+                    request.getDestinationAccountNumber(),
+                    request.getAmount());
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Transfer successful");
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to transfer: " + e.getMessage());
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // Inner class to handle deposit and withdraw requests
     public static class TransactionRequest {
         private String accountNumber;
         private double amount;
@@ -95,6 +116,37 @@ public class AccountController {
 
         public void setAccountNumber(String accountNumber) {
             this.accountNumber = accountNumber;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(double amount) {
+            this.amount = amount;
+        }
+    }
+
+    // New inner class to handle transfer requests
+    public static class TransferRequest {
+        private String sourceAccountNumber;
+        private String destinationAccountNumber;
+        private double amount;
+
+        public String getSourceAccountNumber() {
+            return sourceAccountNumber;
+        }
+
+        public void setSourceAccountNumber(String sourceAccountNumber) {
+            this.sourceAccountNumber = sourceAccountNumber;
+        }
+
+        public String getDestinationAccountNumber() {
+            return destinationAccountNumber;
+        }
+
+        public void setDestinationAccountNumber(String destinationAccountNumber) {
+            this.destinationAccountNumber = destinationAccountNumber;
         }
 
         public double getAmount() {

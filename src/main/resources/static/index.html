@@ -1,101 +1,128 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Auth Test</title>
+    <title>Bank Management System</title>
 </head>
 <body>
-    <h1>Authentication Test</h1>
+    <h1>Bank Management System</h1>
+    <p>Use the forms below to interact with the system.</p>
 
-    <div style="display: flex; gap: 50px;">
-        <!-- Login Form -->
-        <div>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <div>
-                    <label>Username:</label>
-                    <input type="text" id="loginUsername" required>
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <div id="loginResult"></div>
-        </div>
-
-        <!-- Register Form -->
-        <div>
-            <h2>Register</h2>
-            <form id="registerForm">
-                <div>
-                    <label>Username:</label>
-                    <input type="text" id="regUsername" required>
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input type="email" id="regEmail" required>
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" id="regPassword" required>
-                </div>
-                <button type="submit">Register</button>
-            </form>
-            <div id="registerResult"></div>
-        </div>
-    </div>
-
-    <!-- Create Account Form -->
-    <div>
-        <h2>Create Bank Account</h2>
-        <form id="createAccountForm">
-            <div>
-                <label>User ID:</label>
-                <input type="number" id="createAccountUserId" required>
-            </div>
-            <button type="submit">Create Account</button>
-        </form>
-        <div id="createAccountResult"></div>
-    </div>
-
-    <!-- Deposit and Withdraw Forms -->
-    <div>
-        <h2>Deposit / Withdraw</h2>
-        <div style="display: flex; gap: 20px;">
-            <!-- Deposit Form -->
-            <div>
-                <h3>Deposit</h3>
-                <form id="depositForm">
-                    <div>
-                        <label>Account Number:</label>
-                        <input type="text" id="depositAccountNumber" required>
+    <div style="display: flex; flex-direction: column; gap: 30px; font-family: sans-serif;">
+        <!-- Login and Register Forms -->
+        <div style="display: flex; gap: 50px;">
+            <!-- Login Form -->
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div style="margin-bottom: 10px;">
+                        <label>Username:</label>
+                        <input type="text" id="loginUsername" required style="border: 1px solid #ccc; padding: 5px;">
                     </div>
-                    <div>
-                        <label>Amount:</label>
-                        <input type="number" id="depositAmount" required min="1">
+                    <div style="margin-bottom: 15px;">
+                        <label>Password:</label>
+                        <input type="password" id="loginPassword" required style="border: 1px solid #ccc; padding: 5px;">
                     </div>
-                    <button type="submit">Deposit</button>
+                    <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Login</button>
                 </form>
-                <div id="depositResult"></div>
+                <div id="loginResult" style="margin-top: 15px;"></div>
             </div>
 
-            <!-- Withdraw Form -->
-            <div>
-                <h3>Withdraw</h3>
-                <form id="withdrawForm">
-                    <div>
-                        <label>Account Number:</label>
-                        <input type="text" id="withdrawAccountNumber" required>
+            <!-- Register Form -->
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+                <h2>Register</h2>
+                <form id="registerForm">
+                    <div style="margin-bottom: 10px;">
+                        <label>Username:</label>
+                        <input type="text" id="regUsername" required style="border: 1px solid #ccc; padding: 5px;">
                     </div>
-                    <div>
-                        <label>Amount:</label>
-                        <input type="number" id="withdrawAmount" required min="1">
+                    <div style="margin-bottom: 10px;">
+                        <label>Email:</label>
+                        <input type="email" id="regEmail" required style="border: 1px solid #ccc; padding: 5px;">
                     </div>
-                    <button type="submit">Withdraw</button>
+                    <div style="margin-bottom: 15px;">
+                        <label>Password:</label>
+                        <input type="password" id="regPassword" required style="border: 1px solid #ccc; padding: 5px;">
+                    </div>
+                    <button type="submit" style="background-color: #008CBA; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Register</button>
                 </form>
-                <div id="withdrawResult"></div>
+                <div id="registerResult" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- Account Creation and Transaction Forms -->
+        <div style="display: flex; flex-wrap: wrap; gap: 30px;">
+            <!-- Create Account Form -->
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+                <h2>Create Bank Account</h2>
+                <form id="createAccountForm">
+                    <div style="margin-bottom: 15px;">
+                        <label>User ID:</label>
+                        <input type="number" id="createAccountUserId" required style="border: 1px solid #ccc; padding: 5px;">
+                    </div>
+                    <button type="submit" style="background-color: #f44336; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Create Account</button>
+                </form>
+                <div id="createAccountResult" style="margin-top: 15px;"></div>
+            </div>
+
+            <!-- Deposit and Withdraw Forms -->
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+                <h2>Deposit / Withdraw</h2>
+                <div style="display: flex; gap: 20px;">
+                    <!-- Deposit Form -->
+                    <div>
+                        <h3>Deposit</h3>
+                        <form id="depositForm">
+                            <div style="margin-bottom: 10px;">
+                                <label>Account Number:</label>
+                                <input type="text" id="depositAccountNumber" required style="border: 1px solid #ccc; padding: 5px;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label>Amount:</label>
+                                <input type="number" id="depositAmount" required min="1" style="border: 1px solid #ccc; padding: 5px;">
+                            </div>
+                            <button type="submit" style="background-color: #8BC34A; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Deposit</button>
+                        </form>
+                        <div id="depositResult" style="margin-top: 15px;"></div>
+                    </div>
+
+                    <!-- Withdraw Form -->
+                    <div>
+                        <h3>Withdraw</h3>
+                        <form id="withdrawForm">
+                            <div style="margin-bottom: 10px;">
+                                <label>Account Number:</label>
+                                <input type="text" id="withdrawAccountNumber" required style="border: 1px solid #ccc; padding: 5px;">
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label>Amount:</label>
+                                <input type="number" id="withdrawAmount" required min="1" style="border: 1px solid #ccc; padding: 5px;">
+                            </div>
+                            <button type="submit" style="background-color: #FF9800; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Withdraw</button>
+                        </form>
+                        <div id="withdrawResult" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Form -->
+            <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+                <h2>Transfer Funds</h2>
+                <form id="transferForm">
+                    <div style="margin-bottom: 10px;">
+                        <label>Source Account Number:</label>
+                        <input type="text" id="transferSourceAccountNumber" required style="border: 1px solid #ccc; padding: 5px;">
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label>Destination Account Number:</label>
+                        <input type="text" id="transferDestinationAccountNumber" required style="border: 1px solid #ccc; padding: 5px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label>Amount:</label>
+                        <input type="number" id="transferAmount" required min="1" style="border: 1px solid #ccc; padding: 5px;">
+                    </div>
+                    <button type="submit" style="background-color: #607D8B; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Transfer</button>
+                </form>
+                <div id="transferResult" style="margin-top: 15px;"></div>
             </div>
         </div>
     </div>
@@ -104,22 +131,17 @@
         // Login form handler
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
 
             try {
                 const response = await fetch('/api/auth/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
                 });
-
                 const result = await response.json();
                 const resultDiv = document.getElementById('loginResult');
-
                 if (response.ok) {
                     resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
                     resultDiv.innerHTML += `<p>Username: ${result.username}</p>`;
@@ -134,7 +156,6 @@
         // Register form handler
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const username = document.getElementById('regUsername').value;
             const email = document.getElementById('regEmail').value;
             const password = document.getElementById('regPassword').value;
@@ -142,15 +163,11 @@
             try {
                 const response = await fetch('/api/auth/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
                 });
-
                 const result = await response.json();
                 const resultDiv = document.getElementById('registerResult');
-
                 if (response.ok) {
                     resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
                     resultDiv.innerHTML += `<p>User ID: ${result.userId}</p>`;
@@ -166,20 +183,15 @@
         // Create Account form handler
         document.getElementById('createAccountForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const userId = document.getElementById('createAccountUserId').value;
 
             try {
                 const response = await fetch(`/api/accounts/create?userId=${userId}`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 });
-
                 const result = await response.json();
                 const resultDiv = document.getElementById('createAccountResult');
-
                 if (response.ok) {
                     resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
                     resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
@@ -192,25 +204,20 @@
             }
         });
 
-        // New deposit form handler
+        // Deposit form handler
         document.getElementById('depositForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const accountNumber = document.getElementById('depositAccountNumber').value;
             const amount = parseFloat(document.getElementById('depositAmount').value);
 
             try {
                 const response = await fetch('/api/accounts/deposit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ accountNumber, amount })
                 });
-
                 const result = await response.json();
                 const resultDiv = document.getElementById('depositResult');
-
                 if (response.ok) {
                     resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
                     resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
@@ -223,25 +230,20 @@
             }
         });
         
-        // New withdraw form handler
+        // Withdraw form handler
         document.getElementById('withdrawForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
             const accountNumber = document.getElementById('withdrawAccountNumber').value;
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             
             try {
                 const response = await fetch('/api/accounts/withdraw', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ accountNumber, amount })
                 });
-
                 const result = await response.json();
                 const resultDiv = document.getElementById('withdrawResult');
-                
                 if (response.ok) {
                     resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
                     resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
@@ -251,6 +253,31 @@
                 }
             } catch (error) {
                 document.getElementById('withdrawResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
+            }
+        });
+        
+        // Transfer form handler
+        document.getElementById('transferForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const sourceAccountNumber = document.getElementById('transferSourceAccountNumber').value;
+            const destinationAccountNumber = document.getElementById('transferDestinationAccountNumber').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+
+            try {
+                const response = await fetch('/api/accounts/transfer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sourceAccountNumber, destinationAccountNumber, amount })
+                });
+                const result = await response.json();
+                const resultDiv = document.getElementById('transferResult');
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('transferResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
             }
         });
     </script>

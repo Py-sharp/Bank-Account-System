@@ -33,8 +33,9 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html", "/**.html", "/**.css", "/**.js").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/accounts/create").permitAll()
-                        .requestMatchers("/api/accounts/deposit").permitAll() // ADD THIS LINE
-                        .requestMatchers("/api/accounts/withdraw").permitAll() // ADD THIS LINE
+                        .requestMatchers("/api/accounts/deposit").permitAll()
+                        .requestMatchers("/api/accounts/withdraw").permitAll()
+                        .requestMatchers("/api/accounts/transfer").permitAll() // ADD THIS LINE
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions().disable())
