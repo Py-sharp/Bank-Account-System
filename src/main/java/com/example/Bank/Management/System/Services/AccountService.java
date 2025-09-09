@@ -1,3 +1,5 @@
+// src/main/java/com/example/Bank/Management/System/Services/AccountService.java
+
 package com.example.Bank.Management.System.Services;
 
 import com.example.Bank.Management.System.Entity.Account;
@@ -30,6 +32,36 @@ public class AccountService {
         account.setUserId(userId);
         account.setAccountNumber(generateUniqueAccountNumber());
         account.setBalance(0.0); // Set starting balance to zero
+        return accountRepository.save(account);
+    }
+
+    // New method for depositing money
+    public Account deposit(String accountNumber, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive");
+        }
+
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        account.setBalance(account.getBalance() + amount);
+        return accountRepository.save(account);
+    }
+
+    // New method for withdrawing money
+    public Account withdraw(String accountNumber, double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
+        }
+
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        if (account.getBalance() < amount) {
+            throw new IllegalStateException("Insufficient funds");
+        }
+
+        account.setBalance(account.getBalance() - amount);
         return accountRepository.save(account);
     }
 }

@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,7 +6,7 @@
 </head>
 <body>
     <h1>Authentication Test</h1>
-    
+
     <div style="display: flex; gap: 50px;">
         <!-- Login Form -->
         <div>
@@ -46,109 +47,212 @@
         </div>
     </div>
 
-    <!--Account Creation Form-->
+    <!-- Create Account Form -->
     <div>
-    <h2>Create Bank Account</h2>
-    <form id="createAccountForm">
-        <div>
-            <label>User ID:</label>
-            <input type="number" id="createAccountUserId" required>
+        <h2>Create Bank Account</h2>
+        <form id="createAccountForm">
+            <div>
+                <label>User ID:</label>
+                <input type="number" id="createAccountUserId" required>
+            </div>
+            <button type="submit">Create Account</button>
+        </form>
+        <div id="createAccountResult"></div>
+    </div>
+
+    <!-- Deposit and Withdraw Forms -->
+    <div>
+        <h2>Deposit / Withdraw</h2>
+        <div style="display: flex; gap: 20px;">
+            <!-- Deposit Form -->
+            <div>
+                <h3>Deposit</h3>
+                <form id="depositForm">
+                    <div>
+                        <label>Account Number:</label>
+                        <input type="text" id="depositAccountNumber" required>
+                    </div>
+                    <div>
+                        <label>Amount:</label>
+                        <input type="number" id="depositAmount" required min="1">
+                    </div>
+                    <button type="submit">Deposit</button>
+                </form>
+                <div id="depositResult"></div>
+            </div>
+
+            <!-- Withdraw Form -->
+            <div>
+                <h3>Withdraw</h3>
+                <form id="withdrawForm">
+                    <div>
+                        <label>Account Number:</label>
+                        <input type="text" id="withdrawAccountNumber" required>
+                    </div>
+                    <div>
+                        <label>Amount:</label>
+                        <input type="number" id="withdrawAmount" required min="1">
+                    </div>
+                    <button type="submit">Withdraw</button>
+                </form>
+                <div id="withdrawResult"></div>
+            </div>
         </div>
-        <button type="submit">Create Account</button>
-    </form>
-    <div id="createAccountResult"></div>
-</div>
+    </div>
 
     <script>
-    // Login form handler
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const username = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
-        
-        try {
-            const response = await fetch('/api/auth/login', { // Remove localhost:8080
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-            
-            const result = await response.json();
-            const resultDiv = document.getElementById('loginResult');
-            
-            if (response.ok) {
-                resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
-                resultDiv.innerHTML += `<p>Welcome, ${result.username}!</p>`;
-            } else {
-                resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
-            }
-        } catch (error) {
-            document.getElementById('loginResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
-        }
-    });
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-    // Register form handler - similar update
-    document.getElementById('registerForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const username = document.getElementById('regUsername').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        
-        try {
-            const response = await fetch('/api/auth/register', { // Remove localhost:8080
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password })
-            });
-            
-            const result = await response.json();
-            const resultDiv = document.getElementById('registerResult');
-            
-            if (response.ok) {
-                resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
-                resultDiv.innerHTML += `<p>User ID: ${result.userId}</p>`;
-                resultDiv.innerHTML += `<p>Username: ${result.username}</p>`;
-            } else {
-                resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
-            }
-        } catch (error) {
-            document.getElementById('registerResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
-        }
-    });
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
 
-    // Create Account form handler
-document.getElementById('createAccountForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const userId = document.getElementById('createAccountUserId').value;
-    
-    try {
-        const response = await fetch(`/api/accounts/create?userId=${userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('loginResult');
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
+                    resultDiv.innerHTML += `<p>Username: ${result.username}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
+            }
+        });
+
+        // Register form handler
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('registerResult');
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
+                    resultDiv.innerHTML += `<p>User ID: ${result.userId}</p>`;
+                    resultDiv.innerHTML += `<p>Username: ${result.username}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('registerResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
+            }
+        });
+
+        // Create Account form handler
+        document.getElementById('createAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const userId = document.getElementById('createAccountUserId').value;
+
+            try {
+                const response = await fetch(`/api/accounts/create?userId=${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('createAccountResult');
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
+                    resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
+                    resultDiv.innerHTML += `<p>Initial Balance: ${result.balance}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('createAccountResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
+            }
+        });
+
+        // New deposit form handler
+        document.getElementById('depositForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const accountNumber = document.getElementById('depositAccountNumber').value;
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+
+            try {
+                const response = await fetch('/api/accounts/deposit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ accountNumber, amount })
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('depositResult');
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
+                    resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
+                    resultDiv.innerHTML += `<p>New Balance: ${result.newBalance}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('depositResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
             }
         });
         
-        const result = await response.json();
-        const resultDiv = document.getElementById('createAccountResult');
-        
-        if (response.ok) {
-            resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
-            resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
-            resultDiv.innerHTML += `<p>Initial Balance: ${result.balance}</p>`;
-        } else {
-            resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
-        }
-    } catch (error) {
-        document.getElementById('createAccountResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
-    }
-});
-</script>
+        // New withdraw form handler
+        document.getElementById('withdrawForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const accountNumber = document.getElementById('withdrawAccountNumber').value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            
+            try {
+                const response = await fetch('/api/accounts/withdraw', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ accountNumber, amount })
+                });
+
+                const result = await response.json();
+                const resultDiv = document.getElementById('withdrawResult');
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<p style="color: green;">Success: ${result.message}</p>`;
+                    resultDiv.innerHTML += `<p>Account Number: ${result.accountNumber}</p>`;
+                    resultDiv.innerHTML += `<p>New Balance: ${result.newBalance}</p>`;
+                } else {
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('withdrawResult').innerHTML = `<p style="color: red;">Network Error: ${error.message}. Check if server is running.</p>`;
+            }
+        });
+    </script>
+</body>
 </html>

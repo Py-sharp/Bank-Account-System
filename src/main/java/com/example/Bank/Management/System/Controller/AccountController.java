@@ -1,3 +1,5 @@
+// src/main/java/com/example/Bank/Management/System/Controller/AccountController.java
+
 package com.example.Bank.Management.System.Controller;
 
 import com.example.Bank.Management.System.Entity.Account;
@@ -33,6 +35,74 @@ public class AccountController {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Failed to create account: " + e.getMessage());
             return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // New endpoint for deposits
+    @PostMapping("/deposit")
+    public ResponseEntity<?> deposit(@RequestBody TransactionRequest request) {
+        try {
+            Account updatedAccount = accountService.deposit(request.getAccountNumber(), request.getAmount());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Deposit successful");
+            response.put("accountNumber", updatedAccount.getAccountNumber());
+            response.put("newBalance", updatedAccount.getBalance());
+
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to deposit: " + e.getMessage());
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // New endpoint for withdrawals
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestBody TransactionRequest request) {
+        try {
+            Account updatedAccount = accountService.withdraw(request.getAccountNumber(), request.getAmount());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Withdrawal successful");
+            response.put("accountNumber", updatedAccount.getAccountNumber());
+            response.put("newBalance", updatedAccount.getBalance());
+
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to withdraw: " + e.getMessage());
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+
+    // Inner class to handle transaction requests
+    public static class TransactionRequest {
+        private String accountNumber;
+        private double amount;
+
+        public String getAccountNumber() {
+            return accountNumber;
+        }
+
+        public void setAccountNumber(String accountNumber) {
+            this.accountNumber = accountNumber;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public void setAmount(double amount) {
+            this.amount = amount;
         }
     }
 }
