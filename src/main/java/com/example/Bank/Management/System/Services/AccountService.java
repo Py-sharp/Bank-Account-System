@@ -1,6 +1,7 @@
 package com.example.Bank.Management.System.Services;
 
 import com.example.Bank.Management.System.Entity.Account;
+import com.example.Bank.Management.System.Entity.Transaction;
 import com.example.Bank.Management.System.Entity.User;
 import com.example.Bank.Management.System.Repository.AccountRepository;
 import com.example.Bank.Management.System.Repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -19,6 +21,9 @@ public class AccountService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     public Account createAccount(Long userId, String accountType) {
         User user = userRepository.findById(userId)
@@ -43,6 +48,14 @@ public class AccountService {
 
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
+        
+        // Create transaction record
+        Transaction transaction = new Transaction();
+        transaction.setAccountNumber(accountNumber);
+        transaction.setAmount(amount.doubleValue());
+        transaction.setType("DEPOSIT");
+        transaction.setTimestamp(LocalDateTime.now());
+        transactionService.saveTransaction(transaction);
     }
 
     @Transactional
@@ -60,6 +73,14 @@ public class AccountService {
 
         account.setBalance(account.getBalance().subtract(amount));
         accountRepository.save(account);
+        
+        // Create transaction record
+        Transaction transaction = new Transaction();
+        transaction.setAccountNumber(accountNumber);
+        transaction.setAmount(amount.doubleValue());
+        transaction.setType("WITHDRAWAL");
+        transaction.setTimestamp(LocalDateTime.now());
+        transactionService.saveTransaction(transaction);
     }
 
     @Transactional
@@ -88,5 +109,22 @@ public class AccountService {
 
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
+        
+        // Create transaction records for both accounts
+        Transaction sourceTransaction = new Transaction();
+        sourceTransaction.setAccountNumber(sourceAccountNumber);
+        sourceTransaction.setAmount(amount.doubleValue());
+        sourceTransaction.setType("TRANSFER_OUT");
+        sourceTransaction.setRelatedAccount(destinationAccountNumber);
+        sourceTransaction.setTimestamp(LocalDateTime.now());
+        transactionService.saveTransaction(sourceTransaction);
+
+        Transaction destTransaction = new Transaction();
+        destTransaction.setAccountNumber(destinationAccountNumber);
+        destTransaction.setAmount(amount.doubleValue());
+        destTransaction.setType("TRANSFER_IN");
+        destTransaction.setRelatedAccount(sourceAccountNumber);
+        destTransaction.setTimestamp(LocalDateTime.now());
+        transactionService.saveTransaction(destTransaction);
     }
 }

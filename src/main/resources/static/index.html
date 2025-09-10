@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title> Banking System</title>
     <style>
@@ -13,34 +14,42 @@
             align-items: center;
             min-height: 100vh;
         }
+
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             width: 100%;
             padding: 2rem;
             box-sizing: border-box;
         }
+
         .view {
             background-color: white;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
+
         .hidden {
             display: none;
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             color: #2c3e50;
             text-align: center;
         }
+
         h2 {
             margin-bottom: 1.5rem;
         }
+
         .form-section {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
             justify-content: center;
         }
+
         .form-card {
             background-color: #f9f9f9;
             padding: 1.5rem;
@@ -49,21 +58,29 @@
             flex: 1;
             min-width: 280px;
         }
+
         form div {
             margin-bottom: 1rem;
         }
+
         label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: bold;
         }
-        input[type="text"], input[type="number"], input[type="password"], input[type="email"] {
+
+        input[type="text"],
+        input[type="number"],
+        input[type="password"],
+        input[type="email"],
+        select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-sizing: border-box;
         }
+
         button {
             width: 100%;
             padding: 0.75rem;
@@ -74,55 +91,211 @@
             color: white;
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
+
         button:hover {
             transform: translateY(-2px);
         }
-        .button-primary { background-color: #3498db; }
-        .button-success { background-color: #2ecc71; }
-        .button-danger { background-color: #e74c3c; }
-        .button-info { background-color: #f39c12; }
-        .button-neutral { background-color: #95a5a6; }
+
+        .button-primary {
+            background-color: #3498db;
+        }
+
+        .button-success {
+            background-color: #2ecc71;
+        }
+
+        .button-danger {
+            background-color: #e74c3c;
+        }
+
+        .button-info {
+            background-color: #f39c12;
+        }
+
+        .button-neutral {
+            background-color: #95a5a6;
+        }
+
+        .button-secondary {
+            background-color: #7d3c98;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
 
         .result-message {
             margin-top: 1rem;
             padding: 0.75rem;
             border-radius: 8px;
         }
+
         .result-message.success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .result-message.error {
             background-color: #f8d7da;
             color: #721c24;
         }
+
         p {
             margin: 0;
         }
+
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
+
         #accountList {
             margin-top: 2rem;
             border-top: 1px solid #ddd;
             padding-top: 1rem;
         }
+
         .account-item {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             background-color: #ecf0f1;
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 0.75rem;
         }
+
+        /* Transaction table styles */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .transaction-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .transaction-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .credit {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .debit {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .download-btn {
+            background-color: #27ae60;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .download-btn:hover {
+            background-color: #219a52;
+        }
+
+        .download-option {
+            background-color: #3498db;
+        }
+
+        .download-option.pdf {
+            background-color: #e74c3c;
+        }
+
+        #downloadModal .modal-content {
+            max-width: 400px;
+            text-align: center;
+            padding: 1rem 2rem;
+        }
+
+        #downloadModal h3 {
+            margin-top: 0;
+        }
+
+        #downloadModal .download-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        #downloadModal .download-options button {
+            flex: 1;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <!-- Login View -->
         <div id="loginView" class="view">
             <h2>Welcome </h2>
             <div class="form-section">
@@ -164,15 +337,14 @@
             </div>
         </div>
 
-        <!-- Dashboard View -->
         <div id="dashboardView" class="view hidden">
             <div class="dashboard-header">
                 <h2 id="welcomeMessage"></h2>
                 <button id="logoutButton" class="button-danger">Logout</button>
             </div>
-            
+
             <div class="form-section">
-                 <div class="form-card">
+                <div class="form-card">
                     <h2>Create New Account</h2>
                     <form id="createAccountForm">
                         <div>
@@ -201,7 +373,6 @@
                 <div class="form-card">
                     <h2>Deposit / Withdraw</h2>
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Deposit Form -->
                         <div style="flex: 1;">
                             <h3>Deposit</h3>
                             <form id="depositForm">
@@ -211,14 +382,13 @@
                                 </div>
                                 <div>
                                     <label for="depositAmount">Amount:</label>
-                                    <input type="number" id="depositAmount" required min="1">
+                                    <input type="number" id="depositAmount" required min="1" step="0.01">
                                 </div>
                                 <button type="submit" class="button-success">Deposit</button>
                             </form>
                             <div id="depositResult" class="result-message"></div>
                         </div>
 
-                        <!-- Withdraw Form -->
                         <div style="flex: 1;">
                             <h3>Withdraw</h3>
                             <form id="withdrawForm">
@@ -228,7 +398,7 @@
                                 </div>
                                 <div>
                                     <label for="withdrawAmount">Amount:</label>
-                                    <input type="number" id="withdrawAmount" required min="1">
+                                    <input type="number" id="withdrawAmount" required min="1" step="0.01">
                                 </div>
                                 <button type="submit" class="button-info">Withdraw</button>
                             </form>
@@ -250,7 +420,7 @@
                         </div>
                         <div>
                             <label for="transferAmount">Amount:</label>
-                            <input type="number" id="transferAmount" required min="1">
+                            <input type="number" id="transferAmount" required min="1" step="0.01">
                         </div>
                         <button type="submit" class="button-neutral">Transfer</button>
                     </form>
@@ -259,15 +429,59 @@
             </div>
         </div>
     </div>
+
+    <div id="statementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Account Statement</h2>
+                <span class="close" data-modal="statementModal">&times;</span>
+            </div>
+            <div id="modalStatementResult" class="result-message"></div>
+            <div id="modalStatementDetails">
+                <div id="modalTransactionList"></div>
+            </div>
+            <div class="modal-actions">
+                <button id="downloadStatement" class="download-btn">Download Statement</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Choose Download Format</h3>
+                <span class="close" data-modal="downloadModal">&times;</span>
+            </div>
+            <p>What format would you like to download your statement in?</p>
+            <div class="download-options">
+                <button id="downloadCsvBtn" class="download-option button-primary">Download CSV</button>
+                <button id="downloadPdfBtn" class="download-option download-option pdf">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <script>
         // Store logged in user's information
         let loggedInUser = null;
+        let currentTransactions = [];
+        let currentAccountNumber = null;
 
         // --- DOM ELEMENTS ---
         const loginView = document.getElementById('loginView');
         const dashboardView = document.getElementById('dashboardView');
         const welcomeMessage = document.getElementById('welcomeMessage');
         const accountListElement = document.getElementById('accountList');
+
+        const statementModal = document.getElementById('statementModal');
+        const downloadModal = document.getElementById('downloadModal');
+
+        const closeModalBtns = document.querySelectorAll('.close');
+        const downloadStatementBtn = document.getElementById('downloadStatement');
+        const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
 
         // --- HELPER FUNCTIONS ---
         function handleFormResult(resultDivId, isSuccess, message, details = {}) {
@@ -320,14 +534,355 @@
                         <div>
                             <strong>Balance:</strong> R${account.balance.toFixed(2)}
                         </div>
+                        <div>
+                            <button class="view-statement-btn button-secondary" data-account="${account.accountNumber}">View Statement</button>
+                        </div>
                     `;
                     accountListElement.appendChild(accountItem);
+                });
+
+                // Add event listeners to the view statement buttons
+                document.querySelectorAll('.view-statement-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        currentAccountNumber = e.target.getAttribute('data-account');
+                        fetchAndDisplayStatement(currentAccountNumber);
+                    });
                 });
             }
         }
 
-        // --- EVENT LISTENERS FOR FORMS AND BUTTONS ---
+        function fetchAndDisplayStatement(accountNumber) {
+            fetch(`http://localhost:8080/api/transactions/history?accountNumber=${accountNumber}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.transactions) {
+                        currentTransactions = result.transactions;
+                        displayTransactionsInModal(result.transactions, accountNumber);
+                    } else {
+                        showModalError(result.error || 'Failed to fetch transactions');
+                    }
+                })
+                .catch(error => {
+                    showModalError('Network Error. Check if server is running.');
+                });
+        }
 
+        function displayTransactionsInModal(transactions, accountNumber) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalResult = document.getElementById('modalStatementResult');
+            const transactionList = document.getElementById('modalTransactionList');
+
+            modalTitle.textContent = `Statement for Account: ${accountNumber}`;
+
+            if (!transactions || transactions.length === 0) {
+                transactionList.innerHTML = '<p>No transactions found for this account.</p>';
+                modalResult.innerHTML = '<p class="success">No transactions found.</p>';
+                modalResult.style.display = 'block';
+                statementModal.style.display = 'block';
+                return;
+            }
+
+            // Find current account balance
+            const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            const currentBalance = account ? account.balance : 'N/A';
+
+            let tableHTML = `
+                <p><strong>Current Balance: R${currentBalance.toFixed(2)}</strong></p>
+                <p><strong>Total Transactions: ${transactions.length}</strong></p>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Related Account</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            transactions.forEach(transaction => {
+                const date = new Date(transaction.timestamp).toLocaleString();
+                let description = transaction.type.replace('_', ' ');
+                let amountClass = '';
+                let amountSign = '';
+
+                if (transaction.type.includes('DEPOSIT') || transaction.type.includes('TRANSFER_IN')) {
+                    amountClass = 'credit';
+                    amountSign = '+';
+                } else {
+                    amountClass = 'debit';
+                    amountSign = '-';
+                }
+
+                tableHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${description}</td>
+                        <td class="${amountClass}">${amountSign}R${transaction.amount.toFixed(2)}</td>
+                        <td>${transaction.relatedAccount || '-'}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table>';
+            transactionList.innerHTML = tableHTML;
+            modalResult.innerHTML = '<p class="success">Transaction history loaded successfully.</p>';
+            modalResult.style.display = 'block';
+            statementModal.style.display = 'block';
+        }
+
+        function showModalError(message) {
+            const modalResult = document.getElementById('modalStatementResult');
+            modalResult.innerHTML = `<p class="error">${message}</p>`;
+            modalResult.style.display = 'block';
+            statementModal.style.display = 'block';
+        }
+
+        function downloadCsvStatement() {
+            if (currentTransactions.length === 0) {
+                alert('No transactions to download');
+                return;
+            }
+
+            const accountNumber = document.getElementById('modalTitle').textContent.split(': ')[1];
+            const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            const currentBalance = account ? account.balance : 'N/A';
+
+            let csvContent = "Account Statement\n";
+            csvContent += `Account Number: ${accountNumber}\n`;
+            csvContent += `Current Balance: R${currentBalance.toFixed(2)}\n`;
+            csvContent += `Total Transactions: ${currentTransactions.length}\n\n`;
+
+            csvContent += "Date,Description,Amount,Related Account\n";
+
+            currentTransactions.forEach(transaction => {
+                const date = new Date(transaction.timestamp).toLocaleString();
+                let description = transaction.type.replace('_', ' ');
+                let amountSign = '';
+
+                if (transaction.type.includes('DEPOSIT') || transaction.type.includes('TRANSFER_IN')) {
+                    amountSign = '+';
+                } else {
+                    amountSign = '-';
+                }
+
+                const amount = `${amountSign}R${transaction.amount.toFixed(2)}`;
+                const relatedAccount = transaction.relatedAccount || '-';
+
+                csvContent += `"${date}","${description}","${amount}","${relatedAccount}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', `statement_${accountNumber}_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadPdfStatement() {
+            if (currentTransactions.length === 0) {
+                alert('No transactions to download');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const accountNumber = document.getElementById('modalTitle').textContent.split(': ')[1];
+            const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            const currentBalance = account ? account.balance.toFixed(2) : 'N/A';
+            const accountType = account ? account.accountType : 'N/A';
+
+            // Colors
+            const primaryColor = [52, 152, 219]; // #3498db
+            const successColor = [46, 204, 113]; // #2ecc71
+            const headerColor = [44, 62, 80]; // #2c3e50
+            const lightGray = [245, 245, 245];
+
+            // Header with logo and bank name
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 30, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.text('Py# Banking Management System', 105, 17, { align: 'center' });
+
+            // Account information section
+            doc.setFontSize(12);
+            doc.setTextColor(...headerColor);
+            doc.setFont(undefined, 'bold');
+            doc.text('ACCOUNT STATEMENT', 105, 45, { align: 'center' });
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 50, 190, 50);
+
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Statement Period: ${new Date().toLocaleDateString()}`, 20, 60);
+            doc.text(`Generated On: ${new Date().toLocaleString()}`, 20, 67);
+
+            doc.setTextColor(...headerColor);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Account Number: ${accountNumber}`, 130, 60);
+            doc.text(`Account Type: ${accountType}`, 130, 67);
+            doc.text(`Current Balance: R${currentBalance}`, 130, 74);
+
+            // Summary section
+            doc.setFillColor(...lightGray);
+            doc.rect(20, 82, 170, 15, 'F');
+            doc.setTextColor(...headerColor);
+            doc.setFont(undefined, 'bold');
+            doc.text('SUMMARY', 25, 92);
+
+            const totalDeposits = currentTransactions
+                .filter(t => t.type.includes('DEPOSIT') || t.type.includes('TRANSFER_IN'))
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            const totalWithdrawals = currentTransactions
+                .filter(t => t.type.includes('WITHDRAWAL') || t.type.includes('TRANSFER_OUT'))
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            doc.setFontSize(9);
+            doc.setTextColor(80, 80, 80);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Total Transactions: ${currentTransactions.length}`, 25, 102);
+            doc.text(`Total Deposits: R${totalDeposits.toFixed(2)}`, 25, 109);
+            doc.text(`Total Withdrawals: R${totalWithdrawals.toFixed(2)}`, 25, 116);
+
+            // Transaction table header
+            doc.setFillColor(...headerColor);
+            doc.rect(20, 125, 170, 8, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.text('Date', 25, 130);
+            doc.text('Description', 60, 130);
+            doc.text('Amount', 130, 130);
+            doc.text('Related Account', 160, 130);
+
+            // Transaction rows
+            let yPosition = 135;
+            const pageHeight = 270;
+            let isNewPage = false;
+
+            currentTransactions.forEach((transaction, index) => {
+                // Add new page if needed
+                if (yPosition > pageHeight) {
+                    doc.addPage();
+                    yPosition = 20;
+                    isNewPage = true;
+
+                    // Add header to new page
+                    doc.setFillColor(...headerColor);
+                    doc.rect(20, yPosition, 170, 8, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Date', 25, yPosition + 5);
+                    doc.text('Description', 60, yPosition + 5);
+                    doc.text('Amount', 130, yPosition + 5);
+                    doc.text('Related Account', 160, yPosition + 5);
+
+                    yPosition += 15;
+                }
+
+                // Alternate row colors
+                if (index % 2 === 0) {
+                    doc.setFillColor(...lightGray);
+                    doc.rect(20, yPosition - 4, 170, 6, 'F');
+                }
+
+                const date = new Date(transaction.timestamp).toLocaleDateString();
+                let description = transaction.type.replace(/_/g, ' ');
+
+                // Format amount with color
+                let amount = transaction.amount.toFixed(2);
+                let amountColor;
+
+                if (transaction.type.includes('DEPOSIT') || transaction.type.includes('TRANSFER_IN')) {
+                    amount = '+R' + amount;
+                    amountColor = successColor;
+                } else {
+                    amount = '-R' + amount;
+                    amountColor = [231, 76, 60]; // red
+                }
+
+                doc.setTextColor(80, 80, 80);
+                doc.setFontSize(8);
+                doc.setFont(undefined, 'normal');
+                doc.text(date, 25, yPosition);
+                doc.text(description, 60, yPosition);
+
+                doc.setTextColor(...amountColor);
+                doc.text(amount, 130, yPosition);
+
+                doc.setTextColor(80, 80, 80);
+                doc.text(transaction.relatedAccount || '-', 160, yPosition);
+
+                yPosition += 6;
+            });
+
+            // Footer
+            const lastPage = doc.internal.getNumberOfPages();
+            doc.setPage(lastPage);
+
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, pageHeight - 20, 190, pageHeight - 20);
+
+            doc.setTextColor(100, 100, 100);
+            doc.setFontSize(8);
+            doc.setFont(undefined, 'italic');
+            doc.text('Py# Banking Management System.', 105, pageHeight - 15, { align: 'center' });
+            doc.text(`Page ${lastPage} of ${lastPage}`, 105, pageHeight - 10, { align: 'center' });
+
+            // Save the PDF
+            doc.save(`statement_${accountNumber}_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        // --- EVENT LISTENERS FOR MODAL ---
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modalId = e.target.getAttribute('data-modal');
+                document.getElementById(modalId).style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === statementModal) {
+                statementModal.style.display = 'none';
+            }
+            if (event.target === downloadModal) {
+                downloadModal.style.display = 'none';
+            }
+        });
+
+        // Show the download options modal when the "Download Statement" button is clicked
+        downloadStatementBtn.addEventListener('click', () => {
+            if (currentTransactions.length === 0) {
+                alert('No transactions to download');
+                return;
+            }
+            downloadModal.style.display = 'block';
+        });
+
+        // Handle CSV and PDF button clicks
+        downloadCsvBtn.addEventListener('click', () => {
+            downloadCsvStatement();
+            downloadModal.style.display = 'none';
+        });
+
+        downloadPdfBtn.addEventListener('click', () => {
+            downloadPdfStatement();
+            downloadModal.style.display = 'none';
+        });
+
+        // --- EVENT LISTENERS FOR FORMS AND BUTTONS ---
         // Register form handler
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -395,9 +950,10 @@
             const accountType = document.getElementById('accountType').value;
 
             try {
-                const response = await fetch(`http://localhost:8080/api/accounts/create?userId=${loggedInUser.id}&accountType=${accountType}`, {
-                    method: 'POST',
-                });
+                const response = await
+                    fetch(`http://localhost:8080/api/accounts/create?userId=${loggedInUser.id}&accountType=${accountType}`, {
+                        method: 'POST',
+                    });
 
                 const result = await response.json();
                 if (response.ok) {
@@ -408,7 +964,9 @@
                         balance: 0
                     });
                     renderAccounts(loggedInUser.accounts);
-                    handleFormResult('createAccountResult', true, 'Account created successfully!', { accountNumber: result.accountNumber });
+                    handleFormResult('createAccountResult', true, 'Account created successfully!', {
+                        accountNumber: result.accountNumber
+                    });
                 } else {
                     handleFormResult('createAccountResult', false, result.error);
                 }
@@ -424,9 +982,10 @@
             const amount = parseFloat(document.getElementById('depositAmount').value);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/accounts/deposit?accountNumber=${accountNumber}&amount=${amount}`, {
-                    method: 'POST',
-                });
+                const response = await
+                    fetch(`http://localhost:8080/api/accounts/deposit?accountNumber=${accountNumber}&amount=${amount}`, {
+                        method: 'POST',
+                    });
                 const result = await response.json();
                 if (response.ok) {
                     // Find and update the account balance in the loggedInUser object
@@ -451,9 +1010,10 @@
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/accounts/withdraw?accountNumber=${accountNumber}&amount=${amount}`, {
-                    method: 'POST',
-                });
+                const response = await
+                    fetch(`http://localhost:8080/api/accounts/withdraw?accountNumber=${accountNumber}&amount=${amount}`, {
+                        method: 'POST',
+                    });
                 const result = await response.json();
                 if (response.ok) {
                     const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
@@ -478,9 +1038,11 @@
             const amount = parseFloat(document.getElementById('transferAmount').value);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/accounts/transfer?sourceAccountNumber=${sourceAccountNumber}&destinationAccountNumber=${destinationAccountNumber}&amount=${amount}`, {
-                    method: 'POST',
-                });
+                const response = await
+                    fetch(`http://localhost:8080/api/accounts/transfer?sourceAccountNumber=${sourceAccountNumber}&destinationAccountNumber=${destinationAccountNumber}&amount=${amount}`,
+                        {
+                            method: 'POST',
+                        });
                 const result = await response.json();
                 if (response.ok) {
                     const sourceAccount = loggedInUser.accounts.find(acc => acc.accountNumber === sourceAccountNumber);
@@ -489,10 +1051,7 @@
                         sourceAccount.balance -= amount;
                     }
                     if (destinationAccount) {
-                        // NOTE: This part won't update the balance in the UI correctly if the destination account is not the logged-in user's
-                        // The backend handles the actual transfer, but the UI only updates if it can find the destination account in the local loggedInUser object.
-                        // For a full-featured app, we would re-fetch user data after a transfer.
-                        destinationAccount.balance += amount; 
+                        destinationAccount.balance += amount;
                     }
                     renderAccounts(loggedInUser.accounts);
                     handleFormResult('transferResult', true, 'Transfer successful!');
@@ -508,4 +1067,5 @@
         showLogin();
     </script>
 </body>
+
 </html>
