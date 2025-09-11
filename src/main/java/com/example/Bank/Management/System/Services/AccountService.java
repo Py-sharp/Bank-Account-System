@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,6 +28,9 @@ public class AccountService {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private BudgetService budgetService;
+
     public Account createAccount(Long userId, String accountType) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -37,8 +41,19 @@ public class AccountService {
         newAccount.setUser(user);
 
         return accountRepository.save(newAccount);
+        
+    } 
+    
+    public Optional<Account> findByAccountId(Long accountId) {
+        return accountRepository.findById(accountId);
     }
 
+    public List<Account> getAccountsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return accountRepository.findByUser(user);
+    }
+    
     @Transactional
     public Transaction deposit(String accountNumber, BigDecimal amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
@@ -51,13 +66,13 @@ public class AccountService {
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
 
-        // Create transaction record
+        budgetService.allocateFunds(account, amount);
+
         Transaction transaction = new Transaction();
         transaction.setAccountNumber(accountNumber);
         transaction.setAmount(amount.doubleValue());
         transaction.setType("DEPOSIT");
         transaction.setTimestamp(LocalDateTime.now());
-
         return transactionService.saveTransaction(transaction);
     }
 
@@ -69,7 +84,6 @@ public class AccountService {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Amount must be a positive number");
         }
-
         if (account.getBalance().compareTo(amount) < 0) {
             throw new RuntimeException("Insufficient funds");
         }
@@ -77,20 +91,18 @@ public class AccountService {
         account.setBalance(account.getBalance().subtract(amount));
         accountRepository.save(account);
 
-        // Create transaction record
         Transaction transaction = new Transaction();
         transaction.setAccountNumber(accountNumber);
         transaction.setAmount(amount.doubleValue());
         transaction.setType("WITHDRAWAL");
         transaction.setTimestamp(LocalDateTime.now());
-
         return transactionService.saveTransaction(transaction);
     }
 
     @Transactional
     public Map<String, Transaction> transfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
-        if (sourceAccountNumber.equals(destinationAccountNumber)) {
-            throw new RuntimeException("Source and destination accounts cannot be the same");
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new RuntimeException("Amount must be a positive number");
         }
 
         Account sourceAccount = accountRepository.findByAccountNumber(sourceAccountNumber)
@@ -99,22 +111,16 @@ public class AccountService {
         Account destinationAccount = accountRepository.findByAccountNumber(destinationAccountNumber)
                 .orElseThrow(() -> new RuntimeException("Destination account not found"));
 
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("Amount must be a positive number");
-        }
-
         if (sourceAccount.getBalance().compareTo(amount) < 0) {
             throw new RuntimeException("Insufficient funds in source account");
         }
 
-        // Perform the transfer
         sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
         destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
 
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
 
-        // Create transaction records for both accounts
         Transaction sourceTransaction = new Transaction();
         sourceTransaction.setAccountNumber(sourceAccountNumber);
         sourceTransaction.setAmount(amount.doubleValue());

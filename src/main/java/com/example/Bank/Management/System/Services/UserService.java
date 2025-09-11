@@ -46,4 +46,9 @@ public class UserService {
         }
         return false;
     }
+
+    // In UserService.java, add this method:
+public Optional<User> findByUserId(Long userId) {
+    return userRepository.findById(userId);
+}
 }

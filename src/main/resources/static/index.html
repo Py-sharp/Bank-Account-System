@@ -422,6 +422,109 @@
             display: flex;
             gap: 10px;
         }
+
+        /* Budget Styles */
+.budget-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.budget-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.budget-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.budget-status.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.budget-status.inactive {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.budget-progress-bar {
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.budget-progress-fill {
+    height: 100%;
+    background: #4caf50;
+    transition: width 0.3s ease;
+}
+
+.budget-progress-fill.needs {
+    background: #f44336;
+}
+
+.budget-progress-fill.wants {
+    background: #ff9800;
+}
+
+.budget-progress-fill.savings {
+    background: #4caf50;
+}
+
+.budget-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+}
+
+.budget-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.budget-progress-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.button-danger:hover {
+    background-color: #d32f2f;
+}
+
+.button-success {
+    background-color: #4caf50;
+    color: white;
+}
+
+.button-success:hover {
+    background-color: #388e3c;
+}
     </style>
 </head>
 
@@ -497,7 +600,45 @@
                     <p>No accounts found. Create one above!</p>
                 </div>
             </div>
+<!-- Budget Management Section -->
+<hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
 
+<div class="form-section">
+    <div class="form-card">
+        <h2>Budget Settings</h2>
+        <div id="budgetSettings">
+            <p>Auto Allocation: <span id="autoAllocationStatus">Disabled</span></p>
+            <button id="toggleAutoAllocation" class="button-primary">Enable Auto Allocation</button>
+            <div id="budgetSettingsResult" class="result-message"></div>
+        </div>
+        
+        <h3>Your Budgets</h3>
+        <div id="budgetsList">
+            <p>No budgets configured yet.</p>
+        </div>
+        
+        <h3>Create New Budget</h3>
+        <form id="createBudgetForm">
+            <div>
+                <label for="budgetName">Budget Name:</label>
+                <input type="text" id="budgetName" required>
+            </div>
+            <div>
+                <label for="budgetTarget">Target Amount (R):</label>
+                <input type="number" id="budgetTarget" required min="1" step="0.01">
+            </div>
+            <button type="submit" class="button-success">Create Budget</button>
+        </form>
+        <div id="createBudgetResult" class="result-message"></div>
+    </div>
+    
+    <div class="form-card">
+        <h2>Budget Progress</h2>
+        <div id="budgetProgress">
+            <p>Enable auto allocation and create budgets to see progress here.</p>
+        </div>
+    </div>
+</div>
             <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
 
             <div class="form-section">
@@ -636,6 +777,8 @@
         let currentUser = null;
         let currentAccountNumber = null;
         let currentTransactions = [];
+        let userBudgets = [];
+        let budgetSettings = { autoAllocationEnabled: false };
 
         // DOM elements
         const loginView = document.getElementById('loginView');
@@ -661,7 +804,13 @@
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
         const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-
+        const budgetsList = document.getElementById('budgetsList');
+        const budgetProgress = document.getElementById('budgetProgress');
+        const autoAllocationStatus = document.getElementById('autoAllocationStatus');
+        const toggleAutoAllocationBtn = document.getElementById('toggleAutoAllocation');
+        const createBudgetForm = document.getElementById('createBudgetForm');
+        const budgetSettingsResult = document.getElementById('budgetSettingsResult');
+        const createBudgetResult = document.getElementById('createBudgetResult');
         // New modal elements
         const transactionModal = document.getElementById('transactionModal');
         const transactionResult = document.getElementById('transactionResult');
@@ -695,6 +844,10 @@
         applyDateFilterBtn.addEventListener('click', applyDateFilter);
         clearDateFilterBtn.addEventListener('click', clearDateFilter);
         downloadPdfBtn.addEventListener('click', downloadStatementAsPdf);
+
+        //Budegt event listeners
+        toggleAutoAllocationBtn.addEventListener('click', toggleAutoAllocation);
+        createBudgetForm.addEventListener('submit', handleCreateBudget);
 
         // New event listeners
         closeModalBtns.forEach(btn => {
@@ -1306,7 +1459,114 @@
             slipResult.className = 'result-message success';
             transactionSlipModal.style.display = 'block';
         }
+// Function to load accounts for the budget dropdown
+async function loadBudgetAccounts() {
+    if (!currentUserId) return;
 
+    try {
+        const response = await fetch(`http://localhost:8080/api/accounts/user/${currentUserId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+            renderAccountDropdown(data.accounts, budgetAccountDropdown);
+            if (data.accounts.length > 0) {
+                loadBudgetData(data.accounts[0].id);
+            }
+        } else {
+            console.error('Failed to load accounts for budget page:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching user accounts for budget page:', error);
+    }
+}
+
+// Function to fetch and display budget data for an account
+async function loadBudgetData(accountId) {
+    if (!accountId) return;
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/budget/list-account?accountId=${accountId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+            renderBudgets(data.budgets);
+        } else {
+            console.error('Failed to load budgets:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching budget data:', error);
+    }
+}
+
+// Function to render the budget progress bars
+function renderBudgets(budgets) {
+    const budgetProgress = document.getElementById('budget-progress');
+    budgetProgress.innerHTML = '';
+
+    if (budgets.length === 0) {
+        budgetProgress.innerHTML = '<p>No budgets found for this account. Budgets will be automatically created when auto-allocation is enabled.</p>';
+        return;
+    }
+
+    let needsBudget = budgets.find(b => b.name === 'Needs');
+    let wantsBudget = budgets.find(b => b.name === 'Wants');
+    let savingsBudget = budgets.find(b => b.name === 'Savings');
+    
+    let html = '';
+    
+    if (needsBudget) {
+        const progressPercent = needsBudget.targetAmount > 0 ? 
+            Math.min(100, (needsBudget.currentAmount / needsBudget.targetAmount) * 100) : 0;
+        html += `
+            <div class="budget-progress-item">
+                <h4>Needs (70%)</h4>
+                <div class="budget-progress-bar">
+                    <div class="budget-progress-fill needs" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="budget-details">
+                    <span>R${needsBudget.currentAmount.toFixed(2)} / R${needsBudget.targetAmount.toFixed(2)}</span>
+                    <span>${progressPercent.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (wantsBudget) {
+        const progressPercent = wantsBudget.targetAmount > 0 ? 
+            Math.min(100, (wantsBudget.currentAmount / wantsBudget.targetAmount) * 100) : 0;
+        html += `
+            <div class="budget-progress-item">
+                <h4>Wants (20%)</h4>
+                <div class="budget-progress-bar">
+                    <div class="budget-progress-fill wants" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="budget-details">
+                    <span>R${wantsBudget.currentAmount.toFixed(2)} / R${wantsBudget.targetAmount.toFixed(2)}</span>
+                    <span>${progressPercent.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (savingsBudget) {
+        const progressPercent = savingsBudget.targetAmount > 0 ? 
+            Math.min(100, (savingsBudget.currentAmount / savingsBudget.targetAmount) * 100) : 0;
+        html += `
+            <div class="budget-progress-item">
+                <h4>Savings (10%)</h4>
+                <div class="budget-progress-bar">
+                    <div class="budget-progress-fill savings" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="budget-details">
+                    <span>R${savingsBudget.currentAmount.toFixed(2)} / R${savingsBudget.targetAmount.toFixed(2)}</span>
+                    <span>${progressPercent.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    budgetProgress.innerHTML = html;
+}
         // Initialize the app
         initApp();
     </script>
