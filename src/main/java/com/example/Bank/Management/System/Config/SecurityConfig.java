@@ -36,7 +36,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/accounts/deposit").permitAll()
                         .requestMatchers("/api/accounts/withdraw").permitAll()
                         .requestMatchers("/api/accounts/transfer").permitAll()
-                        .requestMatchers("/api/transactions/history").permitAll() // ADDED THIS LINE
+                        .requestMatchers("/api/transactions/history").permitAll()
+                        .requestMatchers("/api/transactions/slip").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions().disable())

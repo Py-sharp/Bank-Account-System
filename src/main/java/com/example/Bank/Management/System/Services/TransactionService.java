@@ -18,7 +18,7 @@ public class TransactionService {
         return transactionRepository.findByAccountNumberOrderByTimestampDesc(accountNumber);
     }
 
-    public void saveTransaction(Transaction transaction) {
-        transactionRepository.save(transaction);
+    public Transaction saveTransaction(Transaction transaction) {
+        return transactionRepository.save(transaction);
     }
 }

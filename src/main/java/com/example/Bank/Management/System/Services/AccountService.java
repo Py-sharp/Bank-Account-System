@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,7 +40,7 @@ public class AccountService {
     }
 
     @Transactional
-    public void deposit(String accountNumber, BigDecimal amount) {
+    public Transaction deposit(String accountNumber, BigDecimal amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
@@ -48,18 +50,19 @@ public class AccountService {
 
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
-        
+
         // Create transaction record
         Transaction transaction = new Transaction();
         transaction.setAccountNumber(accountNumber);
         transaction.setAmount(amount.doubleValue());
         transaction.setType("DEPOSIT");
         transaction.setTimestamp(LocalDateTime.now());
-        transactionService.saveTransaction(transaction);
+
+        return transactionService.saveTransaction(transaction);
     }
 
     @Transactional
-    public void withdraw(String accountNumber, BigDecimal amount) {
+    public Transaction withdraw(String accountNumber, BigDecimal amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
@@ -73,18 +76,19 @@ public class AccountService {
 
         account.setBalance(account.getBalance().subtract(amount));
         accountRepository.save(account);
-        
+
         // Create transaction record
         Transaction transaction = new Transaction();
         transaction.setAccountNumber(accountNumber);
         transaction.setAmount(amount.doubleValue());
         transaction.setType("WITHDRAWAL");
         transaction.setTimestamp(LocalDateTime.now());
-        transactionService.saveTransaction(transaction);
+
+        return transactionService.saveTransaction(transaction);
     }
 
     @Transactional
-    public void transfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
+    public Map<String, Transaction> transfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal amount) {
         if (sourceAccountNumber.equals(destinationAccountNumber)) {
             throw new RuntimeException("Source and destination accounts cannot be the same");
         }
@@ -109,7 +113,7 @@ public class AccountService {
 
         accountRepository.save(sourceAccount);
         accountRepository.save(destinationAccount);
-        
+
         // Create transaction records for both accounts
         Transaction sourceTransaction = new Transaction();
         sourceTransaction.setAccountNumber(sourceAccountNumber);
@@ -126,5 +130,11 @@ public class AccountService {
         destTransaction.setRelatedAccount(sourceAccountNumber);
         destTransaction.setTimestamp(LocalDateTime.now());
         transactionService.saveTransaction(destTransaction);
+
+        Map<String, Transaction> transactions = new HashMap<>();
+        transactions.put("source", sourceTransaction);
+        transactions.put("destination", destTransaction);
+
+        return transactions;
     }
 }
