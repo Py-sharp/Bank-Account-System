@@ -1,209 +1,731 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title> Banking System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            background-color: #f0f2f5;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        :root {
+            --primary-dark: #0d3b3f;
+            --primary: #1a5c63;
+            --primary-light: #2a7d8c;
+            --accent: #c6a96c;
+            --accent-light: #d8c092;
+            --neutral-dark: #2c3e50;
+            --neutral: #7f8c8d;
+            --neutral-light: #ecf0f1;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --error: #e74c3c;
+            --info: #3498db;
+            --white: #ffffff;
+            --off-white: #f8f9fa;
         }
-        .container {
-            max-width: 1000px;
-            width: 100%;
-            padding: 2rem;
+        
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        .view {
-            background-color: white;
-            padding: 2rem;
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--neutral-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Mouse Trail Elements */
+        .mouse-trail {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, opacity 0.3s ease;
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(13, 59, 63, 0.9);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bank-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .welcome-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--accent-light);
+        }
+        
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+        
+        .split-layout {
+            display: flex;
+            height: 550px;
+            background: var(--off-white);
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        .hidden {
-            display: none;
+        
+        .info-section {
+            flex: 1;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: var(--white);
         }
-        h1, h2 {
-            color: #2c3e50;
-            text-align: center;
+        
+        .info-section::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            bottom: 40px;
+            right: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.2);
         }
-        h2 {
+        
+        .info-section h2 {
+            color: var(--white);
+            font-size: 2rem;
             margin-bottom: 1.5rem;
         }
-        .form-section {
+        
+        .info-section p {
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+        
+        .features {
             display: flex;
             flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
-        .form-card {
-            background-color: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem;
+            border-radius: 8px;
             flex: 1;
-            min-width: 280px;
+            min-width: 150px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
         }
+        
+        .feature:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .feature i {
+            font-size: 1.5rem;
+            color: var(--accent-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-section {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--white);
+        }
+        
+        .form-card {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .form-card h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
         form div {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
+        
         label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: bold;
+            font-weight: 500;
+            color: var(--neutral-dark);
         }
-        input[type="text"], input[type="number"], input[type="password"], input[type="email"] {
+        
+        input[type="text"], input[type="number"], input[type="password"], input[type="email"], select {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
+            padding: 0.9rem;
+            border: 1px solid var(--neutral);
             border-radius: 8px;
-            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--off-white);
         }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 92, 99, 0.1);
+        }
+        
         button {
             width: 100%;
-            padding: 0.75rem;
+            padding: 1rem;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            color: white;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--white);
+            transition: all 0.3s ease;
+           
+            
         }
+        
         button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        .button-primary { background-color: #3498db; }
-        .button-success { background-color: #2ecc71; }
-        .button-danger { background-color: #e74c3c; }
-        .button-info { background-color: #f39c12; }
-        .button-neutral { background-color: #95a5a6; }
-
+        
+        .button-primary { 
+            background-color: var(--primary); 
+        }
+        .button-primary:hover { 
+            background-color: var(--primary-dark); 
+        }
+        
+        .button-success { 
+            background-color: var(--success); 
+        }
+        .button-success:hover { 
+            background-color: #219653; 
+        }
+        
+        .button-danger { 
+            background-color: var(--error); 
+        }
+        .button-danger:hover { 
+            background-color: #c0392b; 
+        }
+        
+        .button-info { 
+            background-color: var(--warning); 
+        }
+        .button-info:hover { 
+            background-color: #e67e22; 
+        }
+        
+        .button-neutral { 
+            background-color: var(--neutral); 
+        }
+        .button-neutral:hover { 
+            background-color: #6c7a89; 
+        }
+        
         .result-message {
             margin-top: 1rem;
             padding: 0.75rem;
             border-radius: 8px;
+            font-size: 0.9rem;
         }
+        
         .result-message.success {
             background-color: #d4edda;
             color: #155724;
+            border-left: 4px solid var(--success);
         }
+        
         .result-message.error {
             background-color: #f8d7da;
             color: #721c24;
+            border-left: 4px solid var(--error);
         }
-        p {
-            margin: 0;
+        
+        .signin-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--neutral);
         }
+        
+        .signin-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .signin-link a:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+        
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--primary-dark);
+            border-radius: 12px 0 0 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .profile-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-name {
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-email {
+            color: var(--accent-light);
+            font-size: 0.9rem;
+        }
+        
+        .nav-menu {
+            flex: 1;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+        
+        .nav-item.active {
+            background: var(--accent);
+            color: var(--primary-dark);
+        }
+        
+        .nav-item i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .dashboard-content {
+            flex: 1;
+            background: var(--white);
+            border-radius: 0 12px 12px 0;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--neutral-light);
         }
-        #accountList {
-            margin-top: 2rem;
-            border-top: 1px solid #ddd;
-            padding-top: 1rem;
+        
+        .form-container {
+            background: var(--off-white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
         }
+        
+        .form-container h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
         .account-item {
             display: flex;
             justify-content: space-between;
-            background-color: #ecf0f1;
+            background-color: var(--off-white);
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 0.75rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .account-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background: var(--primary-dark);
+            color: var(--white);
+            padding: 2rem;
+            margin-top: auto;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+             text-align: center;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
+             text-align: center;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            color: var(--accent-light);
+             text-align: center;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--accent-light);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .split-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .info-section::after {
+                display: none;
+            }
+            
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-radius: 12px 12px 0 0;
+            }
+            
+            .dashboard-content {
+                border-radius: 0 0 12px 12px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .info-section, .auth-section {
+                padding: 1.5rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Login View -->
-        <div id="loginView" class="view">
-            <h2>Welcome </h2>
-            <div class="form-section">
-                <div class="form-card">
-                    <h2>Login</h2>
-                    <form id="loginForm">
-                        <div>
-                            <label for="loginUsername">Username:</label>
-                            <input type="text" id="loginUsername" required>
-                        </div>
-                        <div>
-                            <label for="loginPassword">Password:</label>
-                            <input type="password" id="loginPassword" required>
-                        </div>
-                        <button type="submit" class="button-primary">Login</button>
-                    </form>
-                    <div id="loginResult" class="result-message"></div>
-                </div>
+    <!-- Mouse trail elements will be created by JavaScript -->
 
-                <div class="form-card">
-                    <h2>Register</h2>
-                    <form id="registerForm">
-                        <div>
-                            <label for="regUsername">Username:</label>
-                            <input type="text" id="regUsername" required>
+    <!-- Header with Logo and Welcome Message -->
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo">BMS</div>
+                <div class="bank-name">Banking Management System</div>
+            </div>
+            <div class="welcome-text">Welcome to the Banking Management System</div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Login/Register View -->
+        <div id="loginView">
+            <div class="split-layout">
+                <!-- Info Section -->
+                <div class="info-section">
+                    <h2>Your Financial Future Starts Here</h2>
+                    <p>Experience secure and convenient banking with our advanced management system. Access your accounts, transfer funds, and manage your finances with ease.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-lock"></i>
+                            <div>Secure</div>
                         </div>
-                        <div>
-                            <label for="regEmail">Email:</label>
-                            <input type="email" id="regEmail" required>
+                        <div class="feature">
+                            <i class="fas fa-bolt"></i>
+                            <div>Fast</div>
                         </div>
-                        <div>
-                            <label for="regPassword">Password:</label>
-                            <input type="password" id="regPassword" required>
+                        <div class="feature">
+                            <i class="fas fa-desktop"></i>
+                            <div>Digital</div>
                         </div>
-                        <button type="submit" class="button-success">Register</button>
-                    </form>
-                    <div id="registerResult" class="result-message"></div>
+                        <div class="feature">
+                            <i class="fas fa-globe"></i>
+                            <div>24/7 Access</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Authentication Section -->
+                <div class="auth-section">
+                    <!-- Registration Form (shown by default) -->
+                    <div class="form-card" id="registerCard">
+                        <h2>Register</h2>
+                        <form id="registerForm">
+                            <div>
+                                <label for="regUsername">Username:</label>
+                                <input type="text" id="regUsername" required>
+                            </div>
+                            <div>
+                                <label for="regEmail">Email:</label>
+                                <input type="email" id="regEmail" required>
+                            </div>
+                            <div>
+                                <label for="regPassword">Password:</label>
+                                <input type="password" id="regPassword" required>
+                            </div>
+                            <button type="submit" style="background-color: #c6a96c;" class="button-success">Register</button>
+                        </form>
+                        <div class="signin-link">
+                            <p>If you already have an account <a href="#" id="showSignIn">Sign In</a></p>
+                        </div>
+                        <div id="registerResult" class="result-message"></div>
+                    </div>
+                    
+                    <!-- Login Form (hidden by default) -->
+                    <div class="form-card hidden" id="loginCard">
+                        <h2>Sign In</h2>
+                        <form id="loginForm">
+                            <div>
+                                <label for="loginUsername">Username:</label>
+                                <input type="text" id="loginUsername" required>
+                            </div>
+                            <div>
+                                <label for="loginPassword">Password:</label>
+                                <input type="password" id="loginPassword" required>
+                            </div>
+                            <button type="submit"  style="background-color: #c6a96c;" class="button-primary">Login</button>
+                        </form>
+                        <div class="signin-link">
+                            <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                        </div>
+                        <div id="loginResult" class="result-message"></div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Dashboard View -->
-        <div id="dashboardView" class="view hidden">
-            <div class="dashboard-header">
-                <h2 id="welcomeMessage"></h2>
-                <button id="logoutButton" class="button-danger">Logout</button>
-            </div>
-            
-            <div class="form-section">
-                 <div class="form-card">
-                    <h2>Create New Account</h2>
-                    <form id="createAccountForm">
-                        <div>
-                            <label for="accountType">Account Type:</label>
-                            <select id="accountType" required>
-                                <option value="Savings">Savings</option>
-                                <option value="Credit">Credit</option>
-                            </select>
+        
+        <!-- Dashboard View (Initially Hidden) -->
+        <div id="dashboardView" class="hidden">
+            <div class="dashboard-container">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="profile-section">
+                        <div class="profile-pic">
+                            <i class="fas fa-user"></i>
                         </div>
-                        <button type="submit" class="button-primary">Create Account</button>
-                    </form>
-                    <div id="createAccountResult" class="result-message"></div>
+                        <div class="profile-name" id="profileName">John Doe</div>
+                        <div class="profile-email" id="profileEmail">john.doe@example.com</div>
+                    </div>
+                    
+                    <div class="nav-menu">
+                        <div class="nav-item active" data-view="dashboardHome">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </div>
+                        <div class="nav-item" data-view="createAccount">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Create Account</span>
+                        </div>
+                        <div class="nav-item" data-view="depositFunds">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Deposit</span>
+                        </div>
+                        <div class="nav-item" data-view="withdrawFunds">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <span>Withdraw</span>
+                        </div>
+                        <div class="nav-item" data-view="transferFunds">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transfer</span>
+                        </div>
+                        <div class="nav-item" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div id="accountList">
-                <h3>Your Accounts</h3>
-                <div id="accountsPlaceholder">
-                    <p>No accounts found. Create one above!</p>
-                </div>
-            </div>
-
-            <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
-
-            <div class="form-section">
-                <div class="form-card">
-                    <h2>Deposit / Withdraw</h2>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Deposit Form -->
-                        <div style="flex: 1;">
-                            <h3>Deposit</h3>
+                
+                <!-- Dashboard Content -->
+                <div class="dashboard-content">
+                    <div class="dashboard-header">
+                        <h2 id="welcomeMessage">Welcome to Your Dashboard</h2>
+                    </div>
+                    
+                    <!-- Dashboard Home View -->
+                    <div id="dashboardHome" class="view-content">
+                        <h3></h3>
+                        <div id="accountList">
+                            <div id="accountsPlaceholder">
+                                <p>No accounts found. Create one from the menu!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Create Account View -->
+                    <div id="createAccount" class="view-content hidden">
+                        <div class="form-container">
+                            <h3>Create New Account</h3>
+                            <form id="createAccountForm">
+                                <div>
+                                    <label for="accountType">Account Type:</label>
+                                    <select id="accountType" required>
+                                        <option value="Savings">Savings</option>
+                                        <option value="Credit">Credit</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="button-primary">Create Account</button>
+                            </form>
+                            <div id="createAccountResult" class="result-message"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Deposit Funds View -->
+                    <div id="depositFunds" class="view-content hidden">
+                        <div class="form-container">
+                            <h3>Deposit Funds</h3>
                             <form id="depositForm">
                                 <div>
                                     <label for="depositAccountNumber">Account Number:</label>
@@ -217,10 +739,12 @@
                             </form>
                             <div id="depositResult" class="result-message"></div>
                         </div>
-
-                        <!-- Withdraw Form -->
-                        <div style="flex: 1;">
-                            <h3>Withdraw</h3>
+                    </div>
+                    
+                    <!-- Withdraw Funds View -->
+                    <div id="withdrawFunds" class="view-content hidden">
+                        <div class="form-container">
+                            <h3>Withdraw Funds</h3>
                             <form id="withdrawForm">
                                 <div>
                                     <label for="withdrawAccountNumber">Account Number:</label>
@@ -235,31 +759,80 @@
                             <div id="withdrawResult" class="result-message"></div>
                         </div>
                     </div>
-                </div>
-
-                <div class="form-card">
-                    <h2>Transfer Funds</h2>
-                    <form id="transferForm">
-                        <div>
-                            <label for="transferSourceAccountNumber">Source Account Number:</label>
-                            <input type="text" id="transferSourceAccountNumber" required>
+                    
+                    <!-- Transfer Funds View -->
+                    <div id="transferFunds" class="view-content hidden">
+                        <div class="form-container">
+                            <h3>Transfer Funds</h3>
+                            <form id="transferForm">
+                                <div>
+                                    <label for="transferSourceAccountNumber">From Account:</label>
+                                    <input type="text" id="transferSourceAccountNumber" required>
+                                </div>
+                                <div>
+                                    <label for="transferDestinationAccountNumber">To Account:</label>
+                                    <input type="text" id="transferDestinationAccountNumber" required>
+                                </div>
+                                <div>
+                                    <label for="transferAmount">Amount:</label>
+                                    <input type="number" id="transferAmount" required min="1">
+                                </div>
+                                <button type="submit" class="button-neutral">Transfer</button>
+                            </form>
+                            <div id="transferResult" class="result-message"></div>
                         </div>
-                        <div>
-                            <label for="transferDestinationAccountNumber">Destination Account Number:</label>
-                            <input type="text" id="transferDestinationAccountNumber" required>
-                        </div>
-                        <div>
-                            <label for="transferAmount">Amount:</label>
-                            <input type="number" id="transferAmount" required min="1">
-                        </div>
-                        <button type="submit" class="button-neutral">Transfer</button>
-                    </form>
-                    <div id="transferResult" class="result-message"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer -->
+    <footer >
+        
+        
+        <div class="copyright" > 2023 Banking Management System. All rights reserved.
+        </div>
+        
+    </footer>
+
     <script>
+        // Mouse Trail Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const trailCount = 15;
+            const trails = [];
+            
+            // Create trail elements
+            for (let i = 0; i < trailCount; i++) {
+                const trail = document.createElement('div');
+                trail.className = 'mouse-trail';
+                trail.style.opacity = 0;
+                document.body.appendChild(trail);
+                trails.push({
+                    element: trail,
+                    x: 0,
+                    y: 0,
+                    size: 8 - (i * 0.4),
+                    opacity: 1 - (i * 0.06)
+                });
+            }
+            
+            // Update trail positions
+            document.addEventListener('mousemove', function(e) {
+                trails.forEach((trail, index) => {
+                    setTimeout(() => {
+                        trail.x = e.clientX;
+                        trail.y = e.clientY;
+                        trail.element.style.left = trail.x + 'px';
+                        trail.element.style.top = trail.y + 'px';
+                        trail.element.style.width = trail.size + 'px';
+                        trail.element.style.height = trail.size + 'px';
+                        trail.element.style.opacity = trail.opacity;
+                    }, index * 30);
+                });
+            });
+        });
+
         // Store logged in user's information
         let loggedInUser = null;
 
@@ -268,6 +841,14 @@
         const dashboardView = document.getElementById('dashboardView');
         const welcomeMessage = document.getElementById('welcomeMessage');
         const accountListElement = document.getElementById('accountList');
+        const registerCard = document.getElementById('registerCard');
+        const loginCard = document.getElementById('loginCard');
+        const showSignInLink = document.getElementById('showSignIn');
+        const showRegisterLink = document.getElementById('showRegister');
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const navItems = document.querySelectorAll('.nav-item');
+        const viewContents = document.querySelectorAll('.view-content');
 
         // --- HELPER FUNCTIONS ---
         function handleFormResult(resultDivId, isSuccess, message, details = {}) {
@@ -291,9 +872,12 @@
         function showDashboard(user) {
             loggedInUser = user;
             welcomeMessage.textContent = `Welcome, ${loggedInUser.username}`;
+            profileName.textContent = loggedInUser.username;
+            profileEmail.textContent = loggedInUser.email || 'user@example.com';
             renderAccounts(loggedInUser.accounts);
             loginView.classList.add('hidden');
             dashboardView.classList.remove('hidden');
+            showView('dashboardHome');
         }
 
         function showLogin() {
@@ -302,10 +886,32 @@
             dashboardView.classList.add('hidden');
         }
 
+        function toggleAuthForms() {
+            registerCard.classList.toggle('hidden');
+            loginCard.classList.toggle('hidden');
+        }
+
+        function showView(viewId) {
+            // Hide all views
+            viewContents.forEach(view => view.classList.add('hidden'));
+            
+            // Show the selected view
+            document.getElementById(viewId).classList.remove('hidden');
+            
+            // Update active nav item
+            navItems.forEach(item => {
+                if (item.dataset.view === viewId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
         function renderAccounts(accounts) {
             accountListElement.innerHTML = '<h3>Your Accounts</h3>';
             if (!accounts || accounts.length === 0) {
-                accountListElement.innerHTML += '<p>No accounts found. Create one above!</p>';
+                accountListElement.innerHTML += '<p>No accounts found. Create one from the menu!</p>';
             } else {
                 accounts.forEach(account => {
                     const accountItem = document.createElement('div');
@@ -328,6 +934,26 @@
 
         // --- EVENT LISTENERS FOR FORMS AND BUTTONS ---
 
+        // Toggle between register and login forms
+        showSignInLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleAuthForms();
+        });
+
+        showRegisterLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleAuthForms();
+        });
+
+        // Navigation menu items
+        navItems.forEach(item => {
+            if (item.id !== 'logoutButton') {
+                item.addEventListener('click', function() {
+                    showView(this.dataset.view);
+                });
+            }
+        });
+
         // Register form handler
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -345,6 +971,10 @@
                 const result = await response.json();
                 if (response.ok) {
                     handleFormResult('registerResult', true, result.message, { username: result.username });
+                    // Clear form
+                    document.getElementById('registerForm').reset();
+                    // Switch to login form after successful registration
+                    setTimeout(() => toggleAuthForms(), 1500);
                 } else {
                     handleFormResult('registerResult', false, result.error);
                 }
@@ -369,7 +999,8 @@
                 const result = await response.json();
                 if (response.ok) {
                     showDashboard(result.user);
-                    handleFormResult('loginResult', true, 'Login successful!');
+                    // Clear form
+                    document.getElementById('loginForm').reset();
                 } else {
                     handleFormResult('loginResult', false, result.error);
                 }
@@ -381,7 +1012,6 @@
         // Logout button handler
         document.getElementById('logoutButton').addEventListener('click', () => {
             showLogin();
-            handleFormResult('loginResult', true, 'You have been logged out.');
         });
 
         // Create Account form handler
@@ -409,6 +1039,8 @@
                     });
                     renderAccounts(loggedInUser.accounts);
                     handleFormResult('createAccountResult', true, 'Account created successfully!', { accountNumber: result.accountNumber });
+                    // Clear form
+                    document.getElementById('createAccountForm').reset();
                 } else {
                     handleFormResult('createAccountResult', false, result.error);
                 }
@@ -436,6 +1068,8 @@
                         renderAccounts(loggedInUser.accounts);
                     }
                     handleFormResult('depositResult', true, 'Deposit successful!');
+                    // Clear form
+                    document.getElementById('depositForm').reset();
                 } else {
                     handleFormResult('depositResult', false, result.error);
                 }
@@ -462,6 +1096,8 @@
                         renderAccounts(loggedInUser.accounts);
                     }
                     handleFormResult('withdrawResult', true, 'Withdrawal successful!');
+                    // Clear form
+                    document.getElementById('withdrawForm').reset();
                 } else {
                     handleFormResult('withdrawResult', false, result.error);
                 }
@@ -483,19 +1119,17 @@
                 });
                 const result = await response.json();
                 if (response.ok) {
+                    // Update both accounts in the loggedInUser object
                     const sourceAccount = loggedInUser.accounts.find(acc => acc.accountNumber === sourceAccountNumber);
                     const destinationAccount = loggedInUser.accounts.find(acc => acc.accountNumber === destinationAccountNumber);
-                    if (sourceAccount) {
-                        sourceAccount.balance -= amount;
-                    }
-                    if (destinationAccount) {
-                        // NOTE: This part won't update the balance in the UI correctly if the destination account is not the logged-in user's
-                        // The backend handles the actual transfer, but the UI only updates if it can find the destination account in the local loggedInUser object.
-                        // For a full-featured app, we would re-fetch user data after a transfer.
-                        destinationAccount.balance += amount; 
-                    }
+                    
+                    if (sourceAccount) sourceAccount.balance -= amount;
+                    if (destinationAccount) destinationAccount.balance += amount;
+                    
                     renderAccounts(loggedInUser.accounts);
                     handleFormResult('transferResult', true, 'Transfer successful!');
+                    // Clear form
+                    document.getElementById('transferForm').reset();
                 } else {
                     handleFormResult('transferResult', false, result.error);
                 }
@@ -503,9 +1137,6 @@
                 handleFormResult('transferResult', false, 'Network Error. Check if server is running.');
             }
         });
-
-        // Initial view setup
-        showLogin();
     </script>
 </body>
 </html>
