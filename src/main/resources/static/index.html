@@ -1101,48 +1101,68 @@
 
 
         function downloadAllTransactionsPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.setFontSize(16);
-            doc.text("All Transactions", 20, 20);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("All Transactions", 20, 20);
 
-            let y = 40;
-            currentUser.accounts.forEach(acc => {
-                doc.setFontSize(14);
-                doc.setTextColor(0, 0, 0);
-                doc.text(`${acc.type} Account (#${acc.accountNumber})`, 20, y);
-                y += 10;
+    let y = 40;
+    currentUser.accounts.forEach(acc => {
+        doc.setFontSize(14);
+        doc.setTextColor(0,0,0);
+        doc.text(`${acc.type} Account (#${acc.accountNumber})`, 20, y);
+        y += 10;
 
-                doc.setFontSize(11);
-                (acc.transactions || []).forEach(t => {
-                    if (y > 280) { doc.addPage(); y = 20; }
+        doc.setFontSize(11);
+        (acc.transactions || []).forEach(t => {
+            if (y > 280) { doc.addPage(); y = 20; }
 
-                    const dateText = new Date(t.timestamp).toLocaleString();
-                    const typeText = t.type;
-                    const amountText = `R${t.amount.toFixed(2)}`;
-                    const balanceText = `Balance: R${t.balanceAfter.toFixed(2)}`;
+            const dateText = new Date(t.timestamp).toLocaleString();
+            const typeText = t.type;
+            const amountText = `R${t.amount.toFixed(2)}`;
+            const balanceText = `Balance: R${t.balanceAfter.toFixed(2)}`;
 
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(`${dateText} � ${typeText} � `, 20, y);
+            // Build full line but wrap it
+            const line = `${dateText} — ${typeText} — ${amountText} — ${balanceText}`;
+            const wrapped = doc.splitTextToSize(line, 170); // wrap at 170px width
 
-                    // Amount in color
-                    const amountX = doc.getTextWidth(`${dateText} � ${typeText} � `) + 20;
-                    const color = (t.type === "DEPOSIT" || t.type === "TRANSFER_IN") ? [0, 150, 0] : [200, 0, 0];
+            wrapped.forEach((txt, i) => {
+                // Color only the amount inside the line
+                if (txt.includes(amountText)) {
+                    const before = txt.split(amountText)[0];
+                    const after = txt.split(amountText)[1];
+
+                    // Print part before amount
+                    doc.setTextColor(0,0,0);
+                    doc.text(before, 20, y);
+
+                    // Print amount in color
+                    const color = (t.type === "DEPOSIT" || t.type === "TRANSFER_IN") ? [0,150,0] : [200,0,0];
+                    const amountX = 20 + doc.getTextWidth(before);
                     doc.setTextColor(...color);
                     doc.text(amountText, amountX, y);
 
-                    // Balance in black
-                    const balanceX = amountX + doc.getTextWidth(amountText) + 5;
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(balanceText, balanceX, y);
+                    // Print rest after amount
+                    const balanceX = amountX + doc.getTextWidth(amountText);
+                    doc.setTextColor(0,0,0);
+                    doc.text(after, balanceX, y);
+                } else {
+                    doc.setTextColor(0,0,0);
+                    doc.text(txt, 20, y);
+                }
 
-                    y += 8;
-                });
-                y += 12;
+                y += 8; // spacing between wrapped lines
+                if (y > 280) { doc.addPage(); y = 20; }
             });
+            y += 4; // extra spacing between transactions
+        });
 
-            doc.save("all_transactions.pdf");
-        }
+        y += 10;
+    });
+
+    doc.save("all_transactions.pdf");
+}
+
 
 
         // watch storage changes to sync across tabs (demo)
