@@ -2,6 +2,7 @@ package com.example.Bank.Management.System.Controller;
 
 import com.example.Bank.Management.System.Entity.Account;
 import com.example.Bank.Management.System.Services.AccountService;
+import com.example.Bank.Management.System.Entity.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,11 @@ public class AccountController {
     @PostMapping("/deposit")
     public ResponseEntity<?> deposit(@RequestParam String accountNumber, @RequestParam BigDecimal amount) {
         try {
-            accountService.deposit(accountNumber, amount);
-            return ResponseEntity.ok(Map.of("message", "Deposit successful"));
+            Transaction transaction = accountService.deposit(accountNumber, amount);
+            return ResponseEntity.ok(Map.of(
+                "message", "Deposit successful",
+                "transaction", transaction
+            ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -45,8 +49,11 @@ public class AccountController {
     @PostMapping("/withdraw")
     public ResponseEntity<?> withdraw(@RequestParam String accountNumber, @RequestParam BigDecimal amount) {
         try {
-            accountService.withdraw(accountNumber, amount);
-            return ResponseEntity.ok(Map.of("message", "Withdrawal successful"));
+            Transaction transaction = accountService.withdraw(accountNumber, amount);
+            return ResponseEntity.ok(Map.of(
+                "message", "Withdrawal successful",
+                "transaction", transaction
+            ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -54,10 +61,13 @@ public class AccountController {
 
     @PostMapping("/transfer")
     public ResponseEntity<?> transfer(@RequestParam String sourceAccountNumber,
-            @RequestParam String destinationAccountNumber, @RequestParam BigDecimal amount) {
+        @RequestParam String destinationAccountNumber, @RequestParam BigDecimal amount) {
         try {
-            accountService.transfer(sourceAccountNumber, destinationAccountNumber, amount);
-            return ResponseEntity.ok(Map.of("message", "Transfer successful"));
+            Map<String, Transaction> transactions = accountService.transfer(sourceAccountNumber, destinationAccountNumber, amount);
+            return ResponseEntity.ok(Map.of(
+                "message", "Transfer successful",
+                "transactions", transactions
+            ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }

@@ -27,4 +27,15 @@ public class TransactionController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/slip")
+    public ResponseEntity<?> getTransactionSlip(@RequestParam String accountNumber) {
+        try {
+            List<Transaction> transactions = transactionService.getTransactionsByAccountNumber(accountNumber);
+            return ResponseEntity.ok(Map.of("transactions", transactions));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+    
 }

@@ -324,6 +324,207 @@
         .filter-btn:hover {
             background-color: #2980b9;
         }
+
+        /* New styles for enhanced UI */
+        .form-container {
+            flex-basis: 30%;
+            min-width: 300px;
+            padding: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .account-card {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .account-card h3 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+        }
+
+        .account-card p {
+            margin: 0.5rem 0;
+            color: #777;
+        }
+
+        .account-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Budget Styles */
+.budget-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.budget-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.budget-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.budget-status.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.budget-status.inactive {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.budget-progress-bar {
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.budget-progress-fill {
+    height: 100%;
+    background: #4caf50;
+    transition: width 0.3s ease;
+}
+
+.budget-progress-fill.needs {
+    background: #f44336;
+}
+
+.budget-progress-fill.wants {
+    background: #ff9800;
+}
+
+.budget-progress-fill.savings {
+    background: #4caf50;
+}
+
+.budget-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #666;
+}
+
+.budget-progress-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.budget-progress-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.button-danger:hover {
+    background-color: #d32f2f;
+}
+
+.button-success {
+    background-color: #4caf50;
+    color: white;
+}
+
+.button-success:hover {
+    background-color: #388e3c;
+}
     </style>
 </head>
 
@@ -399,7 +600,45 @@
                     <p>No accounts found. Create one above!</p>
                 </div>
             </div>
+<!-- Budget Management Section -->
+<hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
 
+<div class="form-section">
+    <div class="form-card">
+        <h2>Budget Settings</h2>
+        <div id="budgetSettings">
+            <p>Auto Allocation: <span id="autoAllocationStatus">Disabled</span></p>
+            <button id="toggleAutoAllocation" class="button-primary">Enable Auto Allocation</button>
+            <div id="budgetSettingsResult" class="result-message"></div>
+        </div>
+        
+        <h3>Your Budgets</h3>
+        <div id="budgetsList">
+            <p>No budgets configured yet.</p>
+        </div>
+        
+        <h3>Create New Budget</h3>
+        <form id="createBudgetForm">
+            <div>
+                <label for="budgetName">Budget Name:</label>
+                <input type="text" id="budgetName" required>
+            </div>
+            <div>
+                <label for="budgetTarget">Target Amount (R):</label>
+                <input type="number" id="budgetTarget" required min="1" step="0.01">
+            </div>
+            <button type="submit" class="button-success">Create Budget</button>
+        </form>
+        <div id="createBudgetResult" class="result-message"></div>
+    </div>
+    
+    <div class="form-card">
+        <h2>Budget Progress</h2>
+        <div id="budgetProgress">
+            <p>Enable auto allocation and create budgets to see progress here.</p>
+        </div>
+    </div>
+</div>
             <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
 
             <div class="form-section">
@@ -503,429 +742,114 @@
         </div>
     </div>
 
+    <!-- New Modals for Enhanced Features -->
+    <div id="transactionSlipModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="slipModalTitle">Transaction Slip</h2>
+                <span class="close" data-modal="transactionSlipModal">&times;</span>
+            </div>
+            <div id="slipResult" class="result-message"></div>
+            <div id="slipDetails">
+                <div id="slipTransactionList"></div>
+            </div>
+            <div class="modal-actions">
+                <button id="printSlip" class="download-btn">Print Slip</button>
+                <button id="downloadSlipPdf" class="download-btn download-option pdf">Download as PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Account Transaction History</h2>
+                <span class="close" data-modal="transactionModal">&times;</span>
+            </div>
+            <div id="transactionResult" class="result-message"></div>
+            <div id="transactionDetails"></div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <script>
-        // Store logged in user's information
-        let loggedInUser = null;
-        let currentTransactions = [];
+        // Global variables
+        let currentUser = null;
         let currentAccountNumber = null;
-        let dateFilter = { startDate: null, endDate: null };
+        let currentTransactions = [];
+        let userBudgets = [];
+        let budgetSettings = { autoAllocationEnabled: false };
 
-        // --- DOM ELEMENTS ---
+        // DOM elements
         const loginView = document.getElementById('loginView');
         const dashboardView = document.getElementById('dashboardView');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const createAccountForm = document.getElementById('createAccountForm');
+        const depositForm = document.getElementById('depositForm');
+        const withdrawForm = document.getElementById('withdrawForm');
+        const transferForm = document.getElementById('transferForm');
+        const logoutButton = document.getElementById('logoutButton');
         const welcomeMessage = document.getElementById('welcomeMessage');
-        const accountListElement = document.getElementById('accountList');
-
+        const accountList = document.getElementById('accountList');
+        const accountsPlaceholder = document.getElementById('accountsPlaceholder');
         const statementModal = document.getElementById('statementModal');
         const downloadModal = document.getElementById('downloadModal');
-
-        const closeModalBtns = document.querySelectorAll('.close');
+        const modalStatementDetails = document.getElementById('modalStatementDetails');
+        const modalTransactionList = document.getElementById('modalTransactionList');
+        const modalStatementResult = document.getElementById('modalStatementResult');
         const downloadStatementBtn = document.getElementById('downloadStatement');
-        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-
-        // Date filter elements
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
         const applyDateFilterBtn = document.getElementById('applyDateFilter');
         const clearDateFilterBtn = document.getElementById('clearDateFilter');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const budgetsList = document.getElementById('budgetsList');
+        const budgetProgress = document.getElementById('budgetProgress');
+        const autoAllocationStatus = document.getElementById('autoAllocationStatus');
+        const toggleAutoAllocationBtn = document.getElementById('toggleAutoAllocation');
+        const createBudgetForm = document.getElementById('createBudgetForm');
+        const budgetSettingsResult = document.getElementById('budgetSettingsResult');
+        const createBudgetResult = document.getElementById('createBudgetResult');
+        // New modal elements
+        const transactionModal = document.getElementById('transactionModal');
+        const transactionResult = document.getElementById('transactionResult');
+        const transactionDetails = document.getElementById('transactionDetails');
+        const transactionSlipModal = document.getElementById('transactionSlipModal');
+        const printSlipBtn = document.getElementById('printSlip');
+        const downloadSlipPdfBtn = document.getElementById('downloadSlipPdf');
+        const slipTransactionList = document.getElementById('slipTransactionList');
+        const slipResult = document.getElementById('slipResult');
 
-        // --- HELPER FUNCTIONS ---
-        function handleFormResult(resultDivId, isSuccess, message, details = {}) {
-            const resultDiv = document.getElementById(resultDivId);
-            let content;
+        // Close modal buttons
+        const closeModalBtns = document.querySelectorAll('.close');
 
-            if (isSuccess) {
-                resultDiv.classList.remove('error');
-                resultDiv.classList.add('success');
-                content = `<p><strong>Success:</strong> ${message}</p>`;
-                if (details.accountNumber) content += `<p>Account Number: ${details.accountNumber}</p>`;
-                if (details.username) content += `<p>Username: ${details.username}</p>`;
-            } else {
-                resultDiv.classList.remove('success');
-                resultDiv.classList.add('error');
-                content = `<p><strong>Error:</strong> ${message}</p>`;
-            }
-            resultDiv.innerHTML = content;
-        }
+        // Set default dates for filter
+        const today = new Date();
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(today.getMonth() - 1);
 
-        function showDashboard(user) {
-            loggedInUser = user;
-            welcomeMessage.textContent = `Welcome, ${loggedInUser.username}`;
-            renderAccounts(loggedInUser.accounts);
-            loginView.classList.add('hidden');
-            dashboardView.classList.remove('hidden');
-        }
+        startDateInput.valueAsDate = oneMonthAgo;
+        endDateInput.valueAsDate = today;
 
-        function showLogin() {
-            loggedInUser = null;
-            loginView.classList.remove('hidden');
-            dashboardView.classList.add('hidden');
-        }
+        // Event listeners
+        loginForm.addEventListener('submit', handleLogin);
+        registerForm.addEventListener('submit', handleRegister);
+        createAccountForm.addEventListener('submit', handleCreateAccount);
+        depositForm.addEventListener('submit', handleDeposit);
+        withdrawForm.addEventListener('submit', handleWithdraw);
+        transferForm.addEventListener('submit', handleTransfer);
+        logoutButton.addEventListener('click', handleLogout);
+        downloadStatementBtn.addEventListener('click', showDownloadOptions);
+        applyDateFilterBtn.addEventListener('click', applyDateFilter);
+        clearDateFilterBtn.addEventListener('click', clearDateFilter);
+        downloadPdfBtn.addEventListener('click', downloadStatementAsPdf);
 
-        function renderAccounts(accounts) {
-            accountListElement.innerHTML = '<h3>Your Accounts</h3>';
-            if (!accounts || accounts.length === 0) {
-                accountListElement.innerHTML += '<p>No accounts found. Create one above!</p>';
-            } else {
-                accounts.forEach(account => {
-                    const accountItem = document.createElement('div');
-                    accountItem.className = 'account-item';
-                    accountItem.innerHTML = `
-                        <div>
-                            <strong>Type:</strong> ${account.accountType}
-                        </div>
-                        <div>
-                            <strong>Account #:</strong> ${account.accountNumber}
-                        </div>
-                        <div>
-                            <strong>Balance:</strong> R${account.balance.toFixed(2)}
-                        </div>
-                        <div>
-                            <button class="view-statement-btn button-secondary" data-account="${account.accountNumber}">View Statement</button>
-                        </div>
-                    `;
-                    accountListElement.appendChild(accountItem);
-                });
+        //Budegt event listeners
+        toggleAutoAllocationBtn.addEventListener('click', toggleAutoAllocation);
+        createBudgetForm.addEventListener('submit', handleCreateBudget);
 
-                // Add event listeners to the view statement buttons
-                document.querySelectorAll('.view-statement-btn').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        currentAccountNumber = e.target.getAttribute('data-account');
-                        // Reset date filter when opening a new statement
-                        resetDateFilter();
-                        fetchAndDisplayStatement(currentAccountNumber);
-                    });
-                });
-            }
-        }
-
-        function resetDateFilter() {
-            startDateInput.value = '';
-            endDateInput.value = '';
-            dateFilter = { startDate: null, endDate: null };
-        }
-
-        function fetchAndDisplayStatement(accountNumber) {
-            let url = `http://localhost:8080/api/transactions/history?accountNumber=${accountNumber}`;
-
-            // Add date filter parameters if they exist
-            if (dateFilter.startDate) {
-                url += `&startDate=${dateFilter.startDate}`;
-            }
-            if (dateFilter.endDate) {
-                url += `&endDate=${dateFilter.endDate}`;
-            }
-
-            fetch(url)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.transactions) {
-                        currentTransactions = result.transactions;
-                        displayTransactionsInModal(result.transactions, accountNumber);
-                    } else {
-                        showModalError(result.error || 'Failed to fetch transactions');
-                    }
-                })
-                .catch(error => {
-                    showModalError('Network Error. Check if server is running.');
-                });
-        }
-
-        function displayTransactionsInModal(transactions, accountNumber) {
-            const modalTitle = document.getElementById('modalTitle');
-            const modalResult = document.getElementById('modalStatementResult');
-            const transactionList = document.getElementById('modalTransactionList');
-
-            // Update title to show date range if filter is applied
-            let titleText = `Statement for Account: ${accountNumber}`;
-            if (dateFilter.startDate || dateFilter.endDate) {
-                titleText += ` (Filtered: ${dateFilter.startDate || 'Beginning'} to ${dateFilter.endDate || 'Today'})`;
-            }
-            modalTitle.textContent = titleText;
-
-            if (!transactions || transactions.length === 0) {
-                transactionList.innerHTML = '<p>No transactions found for this account.</p>';
-                modalResult.innerHTML = '<p class="success">No transactions found.</p>';
-                modalResult.style.display = 'block';
-                statementModal.style.display = 'block';
-                return;
-            }
-
-            // Find current account balance
-            const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
-            const currentBalance = account ? account.balance : 'N/A';
-
-            let tableHTML = `
-                <p><strong>Current Balance: R${currentBalance.toFixed(2)}</strong></p>
-                <p><strong>Total Transactions: ${transactions.length}</strong></p>
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th>Amount</th>
-                            <th>Related Account</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            transactions.forEach(transaction => {
-                const date = new Date(transaction.timestamp).toLocaleString();
-                let description = transaction.type.replace('_', ' ');
-                let amountClass = '';
-                let amountSign = '';
-
-                if (transaction.type.includes('DEPOSIT') || transaction.type.includes('TRANSFER_IN')) {
-                    amountClass = 'credit';
-                    amountSign = '+';
-                } else {
-                    amountClass = 'debit';
-                    amountSign = '-';
-                }
-
-                tableHTML += `
-                    <tr>
-                        <td>${date}</td>
-                        <td>${description}</td>
-                        <td class="${amountClass}">${amountSign}R${transaction.amount.toFixed(2)}</td>
-                        <td>${transaction.relatedAccount || '-'}</td>
-                    </tr>
-                `;
-            });
-
-            tableHTML += '</tbody></table>';
-            transactionList.innerHTML = tableHTML;
-            modalResult.innerHTML = '<p class="success">Transaction history loaded successfully.</p>';
-            modalResult.style.display = 'block';
-            statementModal.style.display = 'block';
-        }
-
-        function showModalError(message) {
-            const modalResult = document.getElementById('modalStatementResult');
-            modalResult.innerHTML = `<p class="error">${message}</p>`;
-            modalResult.style.display = 'block';
-            statementModal.style.display = 'block';
-        }
-
-        function downloadPdfStatement() {
-            if (currentTransactions.length === 0) {
-                alert('No transactions to download');
-                return;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Use the currentAccountNumber that was set when opening the statement
-            const accountNumber = currentAccountNumber;
-
-            // Fixed: Properly extract account information from loggedInUser
-            const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
-            const currentBalance = account ? account.balance.toFixed(2) : 'N/A';
-            const accountType = account ? account.accountType : 'N/A';
-
-            // Rest of your PDF generation code remains the same...
-            // Colors
-            const primaryColor = [52, 152, 219]; // #3498db
-            const successColor = [46, 204, 113]; // #2ecc71
-            const headerColor = [44, 62, 80]; // #2c3e50
-            const lightGray = [245, 245, 245];
-
-            // Get current date and time separately
-            const now = new Date();
-            const formattedDate = now.toLocaleDateString();
-            const formattedTime = now.toLocaleTimeString();
-
-            // Header with logo and bank name
-            doc.setFillColor(...primaryColor);
-            doc.rect(0, 0, 210, 30, 'F');
-            doc.setFontSize(20);
-            doc.setTextColor(255, 255, 255);
-            doc.setFont(undefined, 'bold');
-            doc.text('BANKING SYSTEM', 105, 17, { align: 'center' });
-
-            // Account information section
-            doc.setFontSize(12);
-            doc.setTextColor(...headerColor);
-            doc.setFont(undefined, 'bold');
-
-            // Include date range in title if filter is applied
-            let statementTitle = 'ACCOUNT STATEMENT';
-            if (dateFilter.startDate || dateFilter.endDate) {
-                statementTitle += ' (FILTERED)';
-            }
-            doc.text(statementTitle, 105, 45, { align: 'center' });
-
-            doc.setDrawColor(200, 200, 200);
-            doc.line(20, 50, 190, 50);
-
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.setFont(undefined, 'normal');
-
-            // Include date range in statement details if filter is applied
-            if (dateFilter.startDate || dateFilter.endDate) {
-                doc.text(`Date Range: ${dateFilter.startDate || 'Beginning'} to ${dateFilter.endDate || 'Today'}`, 20, 60);
-                doc.text(`Statement Period: ${formattedDate}`, 20, 67);
-                doc.text(`Generated On: ${formattedDate}`, 20, 74);
-                doc.text(`Timestamp: ${formattedTime}`, 20, 81);
-
-                doc.setTextColor(...headerColor);
-                doc.setFont(undefined, 'bold');
-                doc.text(`Account Number: ${accountNumber}`, 130, 60);
-                doc.text(`Account Type: ${accountType}`, 130, 67);
-                doc.text(`Current Balance: R${currentBalance}`, 130, 74);
-                doc.text(`Filtered Transactions: ${currentTransactions.length}`, 130, 81);
-
-                // Adjust y-position for summary section
-                doc.setFillColor(...lightGray);
-                doc.rect(20, 89, 170, 15, 'F');
-                doc.setTextColor(...headerColor);
-                doc.setFont(undefined, 'bold');
-                doc.text('SUMMARY', 25, 99);
-
-                var yPosition = 109;
-            } else {
-                doc.text(`Statement Period: ${formattedDate}`, 20, 60);
-                doc.text(`Generated On: ${formattedDate}`, 20, 67);
-                doc.text(`Timestamp: ${formattedTime}`, 20, 74);
-
-                doc.setTextColor(...headerColor);
-                doc.setFont(undefined, 'bold');
-                doc.text(`Account Number: ${accountNumber}`, 130, 60);
-                doc.text(`Account Type: ${accountType}`, 130, 67);
-                doc.text(`Current Balance: R${currentBalance}`, 130, 74);
-
-                // Summary section
-                doc.setFillColor(...lightGray);
-                doc.rect(20, 82, 170, 15, 'F');
-                doc.setTextColor(...headerColor);
-                doc.setFont(undefined, 'bold');
-                doc.text('SUMMARY', 25, 92);
-
-                var yPosition = 102;
-            }
-
-            const totalDeposits = currentTransactions
-                .filter(t => t.type.includes('DEPOSIT') || t.type.includes('TRANSFER_IN'))
-                .reduce((sum, t) => sum + t.amount, 0);
-
-            const totalWithdrawals = currentTransactions
-                .filter(t => t.type.includes('WITHDRAWAL') || t.type.includes('TRANSFER_OUT'))
-                .reduce((sum, t) => sum + t.amount, 0);
-
-            doc.setFontSize(9);
-            doc.setTextColor(80, 80, 80);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Total Transactions: ${currentTransactions.length}`, 25, yPosition);
-            doc.text(`Total Deposits: R${totalDeposits.toFixed(2)}`, 25, yPosition + 7);
-            doc.text(`Total Withdrawals: R${totalWithdrawals.toFixed(2)}`, 25, yPosition + 14);
-
-            // Adjust transaction table header position based on whether we have date filter
-            const tableHeaderY = dateFilter.startDate || dateFilter.endDate ? yPosition + 24 : yPosition + 21;
-
-            // Transaction table header
-            doc.setFillColor(...headerColor);
-            doc.rect(20, tableHeaderY, 170, 8, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFont(undefined, 'bold');
-            doc.text('Date', 25, tableHeaderY + 5);
-            doc.text('Description', 60, tableHeaderY + 5);
-            doc.text('Amount', 130, tableHeaderY + 5);
-            doc.text('Related Account', 160, tableHeaderY + 5);
-
-            // Transaction rows
-            let rowYPosition = tableHeaderY + 15;
-            const pageHeight = 270;
-            let isNewPage = false;
-
-            currentTransactions.forEach((transaction, index) => {
-                // Add new page if needed
-                if (rowYPosition > pageHeight) {
-                    doc.addPage();
-                    rowYPosition = 20;
-                    isNewPage = true;
-
-                    // Add header to new page
-                    doc.setFillColor(...headerColor);
-                    doc.rect(20, rowYPosition, 170, 8, 'F');
-                    doc.setTextColor(255, 255, 255);
-                    doc.setFont(undefined, 'bold');
-                    doc.text('Date', 25, rowYPosition + 5);
-                    doc.text('Description', 60, rowYPosition + 5);
-                    doc.text('Amount', 130, rowYPosition + 5);
-                    doc.text('Related Account', 160, rowYPosition + 5);
-
-                    rowYPosition += 15;
-                }
-
-                // Alternate row colors
-                if (index % 2 === 0) {
-                    doc.setFillColor(...lightGray);
-                    doc.rect(20, rowYPosition - 4, 170, 6, 'F');
-                }
-
-                const date = new Date(transaction.timestamp).toLocaleDateString();
-                let description = transaction.type.replace(/_/g, ' ');
-
-                // Format amount with color
-                let amount = transaction.amount.toFixed(2);
-                let amountColor;
-
-                if (transaction.type.includes('DEPOSIT') || transaction.type.includes('TRANSFER_IN')) {
-                    amount = '+R' + amount;
-                    amountColor = successColor;
-                } else {
-                    amount = '-R' + amount;
-                    amountColor = [231, 76, 60]; // red
-                }
-
-                doc.setTextColor(80, 80, 80);
-                doc.setFontSize(8);
-                doc.setFont(undefined, 'normal');
-                doc.text(date, 25, rowYPosition);
-                doc.text(description, 60, rowYPosition);
-
-                doc.setTextColor(...amountColor);
-                doc.text(amount, 130, rowYPosition);
-
-                doc.setTextColor(80, 80, 80);
-                doc.text(transaction.relatedAccount || '-', 160, rowYPosition);
-
-                rowYPosition += 6;
-            });
-
-            // Footer
-            const lastPage = doc.internal.getNumberOfPages();
-            doc.setPage(lastPage);
-
-            doc.setDrawColor(200, 200, 200);
-            doc.line(20, pageHeight - 20, 190, pageHeight - 20);
-
-            doc.setTextColor(100, 100, 100);
-            doc.setFontSize(8);
-            doc.setFont(undefined, 'italic');
-            doc.text('Py# Banking Management System.', 105, pageHeight - 15, { align: 'center' });
-            doc.text(`Page ${lastPage} of ${lastPage}`, 105, pageHeight - 10, { align: 'center' });
-
-            // Generate filename with date range if filter is applied
-            let filename = `statement_${accountNumber}_${new Date().toISOString().split('T')[0]}`;
-            if (dateFilter.startDate) {
-                filename += `_from_${dateFilter.startDate}`;
-            }
-            if (dateFilter.endDate) {
-                filename += `_to_${dateFilter.endDate}`;
-            }
-
-            // Save the PDF
-            doc.save(`${filename}.pdf`);
-        }
-
-        // --- EVENT LISTENERS FOR MODAL ---
+        // New event listeners
         closeModalBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const modalId = e.target.getAttribute('data-modal');
@@ -934,230 +858,717 @@
         });
 
         window.addEventListener('click', (event) => {
-            if (event.target === statementModal) {
-                statementModal.style.display = 'none';
+            if (event.target === transactionSlipModal) {
+                transactionSlipModal.style.display = 'none';
             }
-            if (event.target === downloadModal) {
-                downloadModal.style.display = 'none';
+            if (event.target === transactionModal) {
+                transactionModal.style.display = 'none';
             }
         });
 
-        // Apply date filter button
-        applyDateFilterBtn.addEventListener('click', () => {
-            const startDate = startDateInput.value;
-            const endDate = endDateInput.value;
+        printSlipBtn.addEventListener('click', () => {
+            const slipContent = document.getElementById('slipDetails').innerHTML;
+            const originalContent = document.body.innerHTML;
 
-            // Validate dates
-            if (startDate && endDate && startDate > endDate) {
-                showModalError('Start date cannot be after end date');
-                return;
+            document.body.innerHTML = `
+                <div style="padding: 20px; font-family: Arial, sans-serif;">
+                    <h1 style="text-align: center;">Transaction Slip</h1>
+                    ${slipContent}
+                </div>
+            `;
+
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload();
+        });
+
+        downloadSlipPdfBtn.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const slipTitle = document.getElementById('slipModalTitle').textContent;
+            const slipContent = document.getElementById('slipDetails').textContent;
+
+            doc.setFontSize(16);
+            doc.text(slipTitle, 105, 15, { align: 'center' });
+
+            doc.setFontSize(10);
+            const splitText = doc.splitTextToSize(slipContent, 180);
+            doc.text(splitText, 15, 30);
+
+            doc.save(`transaction_slip_${currentAccountNumber}_${new Date().toISOString().split('T')[0]}.pdf`);
+        });
+
+        // Initialize the application
+        function initApp() {
+            // Check if user is already logged in (from localStorage)
+            const savedUser = localStorage.getItem('bankingUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            } else {
+                showLogin();
             }
+        }
 
-            dateFilter = {
-                startDate: startDate || null,
-                endDate: endDate || null
-            };
+        // Show login view
+        function showLogin() {
+            loginView.classList.remove('hidden');
+            dashboardView.classList.add('hidden');
+        }
 
-            fetchAndDisplayStatement(currentAccountNumber);
-        });
+        // Show dashboard view
+        function showDashboard() {
+            loginView.classList.add('hidden');
+            dashboardView.classList.remove('hidden');
+            welcomeMessage.textContent = `Welcome, ${currentUser.username}!`;
+            renderAccounts();
+        }
 
-        // Clear date filter button
-        clearDateFilterBtn.addEventListener('click', () => {
-            resetDateFilter();
-            fetchAndDisplayStatement(currentAccountNumber);
-        });
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
 
-        // Show the download options modal when the "Download Statement" button is clicked
-        downloadStatementBtn.addEventListener('click', () => {
-            if (currentTransactions.length === 0) {
-                alert('No transactions to download');
-                return;
-            }
-            downloadModal.style.display = 'block';
-        });
+            // Simulate API call
+            setTimeout(() => {
+                // For demo purposes, we'll just check if the user exists in localStorage
+                const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
+                const user = users.find(u => u.username === username && u.password === password);
 
-        // Handle PDF button click
-        downloadPdfBtn.addEventListener('click', () => {
-            downloadPdfStatement();
-            downloadModal.style.display = 'none';
-        });
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('bankingUser', JSON.stringify(user));
+                    showResult('loginResult', 'Login successful!', true);
+                    showDashboard();
+                } else {
+                    showResult('loginResult', 'Invalid username or password', false);
+                }
+            }, 500);
+        }
 
-        // --- EVENT LISTENERS FOR FORMS AND BUTTONS ---
-        // Register form handler
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        // Handle register
+        function handleRegister(e) {
             e.preventDefault();
             const username = document.getElementById('regUsername').value;
             const email = document.getElementById('regEmail').value;
             const password = document.getElementById('regPassword').value;
 
-            try {
-                const response = await fetch('http://localhost:8080/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    handleFormResult('registerResult', true, result.message, { username: result.username });
-                } else {
-                    handleFormResult('registerResult', false, result.error);
+            // Simulate API call
+            setTimeout(() => {
+                // Check if username already exists
+                const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
+                if (users.some(u => u.username === username)) {
+                    showResult('registerResult', 'Username already exists', false);
+                    return;
                 }
-            } catch (error) {
-                handleFormResult('registerResult', false, 'Network Error. Check if server is running.');
-            }
-        });
 
-        // Login form handler
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                // Create new user
+                const newUser = {
+                    id: Date.now().toString(),
+                    username,
+                    email,
+                    password,
+                    accounts: []
+                };
+
+                users.push(newUser);
+                localStorage.setItem('bankingUsers', JSON.stringify(users));
+                showResult('registerResult', 'Registration successful! You can now login.', true);
+                registerForm.reset();
+            }, 500);
+        }
+
+        // Handle create account
+        function handleCreateAccount(e) {
             e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            try {
-                const response = await fetch('http://localhost:8080/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    showDashboard(result.user);
-                    handleFormResult('loginResult', true, 'Login successful!');
-                } else {
-                    handleFormResult('loginResult', false, result.error);
-                }
-            } catch (error) {
-                handleFormResult('loginResult', false, 'Network Error. Check if server is running.');
-            }
-        });
-
-        // Logout button handler
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            showLogin();
-            handleFormResult('loginResult', true, 'You have been logged out.');
-        });
-
-        // Create Account form handler
-        document.getElementById('createAccountForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!loggedInUser) {
-                handleFormResult('createAccountResult', false, 'Please log in first.');
-                return;
-            }
-
             const accountType = document.getElementById('accountType').value;
 
-            try {
-                const response = await fetch(`http://localhost:8080/api/accounts/create?userId=${loggedInUser.id}&accountType=${accountType}`, {
-                    method: 'POST',
-                });
+            // Simulate API call
+            setTimeout(() => {
+                // Generate a random account number
+                const accountNumber = Math.floor(1000000000 + Math.random() * 9000000000).toString();
 
-                const result = await response.json();
-                if (response.ok) {
-                    // Update user object with the new account
-                    loggedInUser.accounts.push({
-                        accountType: result.accountType,
-                        accountNumber: result.accountNumber,
-                        balance: 0
-                    });
-                    renderAccounts(loggedInUser.accounts);
-                    handleFormResult('createAccountResult', true, 'Account created successfully!', { accountNumber: result.accountNumber });
-                } else {
-                    handleFormResult('createAccountResult', false, result.error);
+                // Create new account
+                const newAccount = {
+                    accountNumber,
+                    type: accountType,
+                    balance: 0,
+                    transactions: []
+                };
+
+                // Add to current user
+                currentUser.accounts.push(newAccount);
+                localStorage.setItem('bankingUser', JSON.stringify(currentUser));
+
+                // Update users list
+                const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('bankingUsers', JSON.stringify(users));
                 }
-            } catch (error) {
-                handleFormResult('createAccountResult', false, 'Network Error. Check if server is running.');
-            }
-        });
 
-        // Deposit form handler
-        document.getElementById('depositForm').addEventListener('submit', async (e) => {
+                showResult('createAccountResult', `Account created successfully! Account Number: ${accountNumber}`, true);
+                renderAccounts();
+                createAccountForm.reset();
+            }, 500);
+        }
+
+        // Handle deposit
+        function handleDeposit(e) {
             e.preventDefault();
             const accountNumber = document.getElementById('depositAccountNumber').value;
             const amount = parseFloat(document.getElementById('depositAmount').value);
 
-            try {
-                const response = await fetch(`http://localhost:8080/api/accounts/deposit?accountNumber=${accountNumber}&amount=${amount}`, {
-                    method: 'POST',
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    // Find and update the account balance in the loggedInUser object
-                    const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
-                    if (account) {
-                        account.balance += amount;
-                        renderAccounts(loggedInUser.accounts);
-                    }
-                    handleFormResult('depositResult', true, 'Deposit successful!');
-                } else {
-                    handleFormResult('depositResult', false, result.error);
-                }
-            } catch (error) {
-                handleFormResult('depositResult', false, 'Network Error. Check if server is running.');
+            // Find account
+            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            if (!account) {
+                showResult('depositResult', 'Account not found', false);
+                return;
             }
-        });
 
-        // Withdraw form handler
-        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            // Simulate API call
+            setTimeout(() => {
+                // Update balance
+                account.balance += amount;
+
+                // Add transaction
+                account.transactions.push({
+                    id: Date.now().toString(),
+                    type: 'DEPOSIT',
+                    amount,
+                    timestamp: new Date().toISOString(),
+                    balanceAfter: account.balance
+                });
+
+                // Update storage
+                updateUserData();
+
+                showResult('depositResult', `Deposit successful! New balance: R${account.balance.toFixed(2)}`, true);
+                renderAccounts();
+                depositForm.reset();
+
+                // Show transaction slip
+                showTransactionSlip(accountNumber, account.transactions[account.transactions.length - 1]);
+            }, 500);
+        }
+
+        // Handle withdraw
+        function handleWithdraw(e) {
             e.preventDefault();
             const accountNumber = document.getElementById('withdrawAccountNumber').value;
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
 
-            try {
-                const response = await fetch(`http://localhost:8080/api/accounts/withdraw?accountNumber=${accountNumber}&amount=${amount}`, {
-                    method: 'POST',
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    const account = loggedInUser.accounts.find(acc => acc.accountNumber === accountNumber);
-                    if (account) {
-                        account.balance -= amount;
-                        renderAccounts(loggedInUser.accounts);
-                    }
-                    handleFormResult('withdrawResult', true, 'Withdrawal successful!');
-                } else {
-                    handleFormResult('withdrawResult', false, result.error);
-                }
-            } catch (error) {
-                handleFormResult('withdrawResult', false, 'Network Error. Check if server is running.');
+            // Find account
+            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            if (!account) {
+                showResult('withdrawResult', 'Account not found', false);
+                return;
             }
-        });
 
-        // Transfer form handler
-        document.getElementById('transferForm').addEventListener('submit', async (e) => {
+            if (account.balance < amount) {
+                showResult('withdrawResult', 'Insufficient funds', false);
+                return;
+            }
+
+            // Simulate API call
+            setTimeout(() => {
+                // Update balance
+                account.balance -= amount;
+
+                // Add transaction
+                account.transactions.push({
+                    id: Date.now().toString(),
+                    type: 'WITHDRAWAL',
+                    amount,
+                    timestamp: new Date().toISOString(),
+                    balanceAfter: account.balance
+                });
+
+                // Update storage
+                updateUserData();
+
+                showResult('withdrawResult', `Withdrawal successful! New balance: R${account.balance.toFixed(2)}`, true);
+                renderAccounts();
+                withdrawForm.reset();
+
+                // Show transaction slip
+                showTransactionSlip(accountNumber, account.transactions[account.transactions.length - 1]);
+            }, 500);
+        }
+
+        // Handle transfer
+        function handleTransfer(e) {
             e.preventDefault();
             const sourceAccountNumber = document.getElementById('transferSourceAccountNumber').value;
-            const destinationAccountNumber = document.getElementById('transferDestinationAccountNumber').value;
+            const destAccountNumber = document.getElementById('transferDestinationAccountNumber').value;
             const amount = parseFloat(document.getElementById('transferAmount').value);
 
-            try {
-                const response = await fetch(`http://localhost:8080/api/accounts/transfer?sourceAccountNumber=${sourceAccountNumber}&destinationAccountNumber=${destinationAccountNumber}&amount=${amount}`, {
-                    method: 'POST',
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    const sourceAccount = loggedInUser.accounts.find(acc => acc.accountNumber === sourceAccountNumber);
-                    const destinationAccount = loggedInUser.accounts.find(acc => acc.accountNumber === destinationAccountNumber);
-                    if (sourceAccount) {
-                        sourceAccount.balance -= amount;
-                    }
-                    if (destinationAccount) {
-                        destinationAccount.balance += amount;
-                    }
-                    renderAccounts(loggedInUser.accounts);
-                    handleFormResult('transferResult', true, 'Transfer successful!');
-                } else {
-                    handleFormResult('transferResult', false, result.error);
-                }
-            } catch (error) {
-                handleFormResult('transferResult', false, 'Network Error. Check if server is running.');
-            }
-        });
+            // Find accounts
+            const sourceAccount = currentUser.accounts.find(acc => acc.accountNumber === sourceAccountNumber);
+            const destAccount = currentUser.accounts.find(acc => acc.accountNumber === destAccountNumber);
 
-        // Initial view setup
-        showLogin();
+            if (!sourceAccount) {
+                showResult('transferResult', 'Source account not found', false);
+                return;
+            }
+
+            if (!destAccount) {
+                showResult('transferResult', 'Destination account not found', false);
+                return;
+            }
+
+            if (sourceAccount.balance < amount) {
+                showResult('transferResult', 'Insufficient funds', false);
+                return;
+            }
+
+            // Simulate API call
+            setTimeout(() => {
+                // Update balances
+                sourceAccount.balance -= amount;
+                destAccount.balance += amount;
+
+                // Add transactions
+                const timestamp = new Date().toISOString();
+                sourceAccount.transactions.push({
+                    id: Date.now().toString(),
+                    type: 'TRANSFER_OUT',
+                    amount,
+                    timestamp,
+                    relatedAccount: destAccountNumber,
+                    balanceAfter: sourceAccount.balance
+                });
+
+                destAccount.transactions.push({
+                    id: Date.now().toString() + '_in',
+                    type: 'TRANSFER_IN',
+                    amount,
+                    timestamp,
+                    relatedAccount: sourceAccountNumber,
+                    balanceAfter: destAccount.balance
+                });
+
+                // Update storage
+                updateUserData();
+
+                showResult('transferResult', `Transfer successful! New balance: R${sourceAccount.balance.toFixed(2)}`, true);
+                renderAccounts();
+                transferForm.reset();
+
+                // Show transaction slip
+                showTransactionSlip(sourceAccountNumber, sourceAccount.transactions[sourceAccount.transactions.length - 1]);
+            }, 500);
+        }
+
+        // Handle logout
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('bankingUser');
+            showLogin();
+        }
+
+        // Render accounts list
+        function renderAccounts() {
+            if (!currentUser.accounts || currentUser.accounts.length === 0) {
+                accountsPlaceholder.innerHTML = '<p>No accounts found. Create one above!</p>';
+                return;
+            }
+
+            accountsPlaceholder.innerHTML = '';
+            currentUser.accounts.forEach(account => {
+                const accountEl = document.createElement('div');
+                accountEl.className = 'account-item';
+                accountEl.innerHTML = `
+                    <div>
+                        <strong>${account.type} Account</strong><br>
+                        <span>Account #: ${account.accountNumber}</span><br>
+                        <span>Balance: R${account.balance.toFixed(2)}</span>
+                    </div>
+                    <div>
+                        <button class="button-secondary" onclick="viewStatement('${account.accountNumber}')">View Statement</button>
+                    </div>
+                `;
+                accountsPlaceholder.appendChild(accountEl);
+            });
+        }
+
+        // View account statement
+        function viewStatement(accountNumber) {
+            currentAccountNumber = accountNumber;
+            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            if (!account) return;
+
+            // Set modal title
+            document.getElementById('modalTitle').textContent = `Statement for Account: ${accountNumber}`;
+
+            // Show all transactions initially
+            displayTransactions(account.transactions);
+            statementModal.style.display = 'block';
+        }
+
+        // Display transactions in modal
+        function displayTransactions(transactions) {
+            if (!transactions || transactions.length === 0) {
+                modalTransactionList.innerHTML = '<p>No transactions found.</p>';
+                return;
+            }
+
+            // Sort transactions by date (newest first)
+            transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            let tableHTML = `
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Related Account</th>
+                            <th>Balance After</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            transactions.forEach(tx => {
+                const isCredit = tx.type.includes('DEPOSIT') || tx.type.includes('TRANSFER_IN');
+                tableHTML += `
+                    <tr>
+                        <td>${new Date(tx.timestamp).toLocaleString()}</td>
+                        <td>${tx.type.replace('_', ' ')}</td>
+                        <td class="${isCredit ? 'credit' : 'debit'}">${isCredit ? '+' : '-'}R${tx.amount.toFixed(2)}</td>
+                        <td>${tx.relatedAccount || '-'}</td>
+                        <td>R${tx.balanceAfter.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table>';
+            modalTransactionList.innerHTML = tableHTML;
+            modalStatementResult.textContent = '';
+        }
+
+        // Apply date filter
+        function applyDateFilter() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            endDate.setHours(23, 59, 59, 999); // Include the entire end date
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                modalStatementResult.textContent = 'Please select valid dates';
+                modalStatementResult.className = 'result-message error';
+                return;
+            }
+
+            if (startDate > endDate) {
+                modalStatementResult.textContent = 'Start date cannot be after end date';
+                modalStatementResult.className = 'result-message error';
+                return;
+            }
+
+            const account = currentUser.accounts.find(acc => acc.accountNumber === currentAccountNumber);
+            if (!account) return;
+
+            const filteredTransactions = account.transactions.filter(tx => {
+                const txDate = new Date(tx.timestamp);
+                return txDate >= startDate && txDate <= endDate;
+            });
+
+            if (filteredTransactions.length === 0) {
+                modalStatementResult.textContent = 'No transactions found in the selected date range';
+                modalStatementResult.className = 'result-message error';
+            } else {
+                modalStatementResult.textContent = `Showing ${filteredTransactions.length} transactions between ${startDate.toLocaleDateString()} and ${endDate.toLocaleDateString()}`;
+                modalStatementResult.className = 'result-message success';
+            }
+
+            displayTransactions(filteredTransactions);
+        }
+
+        // Clear date filter
+        function clearDateFilter() {
+            startDateInput.valueAsDate = oneMonthAgo;
+            endDateInput.valueAsDate = today;
+            const account = currentUser.accounts.find(acc => acc.accountNumber === currentAccountNumber);
+            if (account) {
+                displayTransactions(account.transactions);
+                modalStatementResult.textContent = 'Showing all transactions';
+                modalStatementResult.className = 'result-message success';
+            }
+        }
+
+        // Show download options
+        function showDownloadOptions() {
+            downloadModal.style.display = 'block';
+        }
+
+        // Download statement as PDF
+        function downloadStatementAsPdf() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const account = currentUser.accounts.find(acc => acc.accountNumber === currentAccountNumber);
+            if (!account) return;
+
+            // Set title
+            doc.setFontSize(16);
+            doc.text(`Account Statement - ${currentAccountNumber}`, 105, 15, { align: 'center' });
+
+            // Account info
+            doc.setFontSize(12);
+            doc.text(`Account Type: ${account.type}`, 20, 25);
+            doc.text(`Current Balance: R${account.balance.toFixed(2)}`, 20, 35);
+            doc.text(`Statement Period: ${startDateInput.value} to ${endDateInput.value}`, 20, 45);
+
+            // Transactions table
+            let y = 60;
+            doc.setFontSize(10);
+
+            // Table header
+            doc.setFillColor(200, 200, 200);
+            doc.rect(20, y, 170, 10, 'F');
+            doc.text('Date', 22, y + 7);
+            doc.text('Type', 60, y + 7);
+            doc.text('Amount', 100, y + 7);
+            doc.text('Balance', 140, y + 7);
+            y += 10;
+
+            // Filter transactions by date if filter is applied
+            let transactionsToExport = account.transactions;
+            if (startDateInput.value && endDateInput.value) {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                endDate.setHours(23, 59, 59, 999);
+
+                transactionsToExport = account.transactions.filter(tx => {
+                    const txDate = new Date(tx.timestamp);
+                    return txDate >= startDate && txDate <= endDate;
+                });
+            }
+
+            // Sort by date (newest first)
+            transactionsToExport.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            // Table rows
+            transactionsToExport.forEach(tx => {
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
+
+                const isCredit = tx.type.includes('DEPOSIT') || tx.type.includes('TRANSFER_IN');
+                doc.setTextColor(0, 0, 0);
+                
+                doc.text(new Date(tx.timestamp).toLocaleDateString(), 22, y + 7);
+                doc.text(tx.type.replace('_', ' '), 60, y + 7);
+                
+                // Set color for amount based on transaction type
+                doc.setTextColor(isCredit ? 0 :  128, 0, 255, 0, 0);
+                doc.text(`${isCredit ? '+' : '-'}R${tx.amount.toFixed(2)}`, 100, y + 7);
+                
+                doc.setTextColor(0, 0, 0);
+                doc.text(`R${tx.balanceAfter.toFixed(2)}`, 140, y + 7);
+                
+                y += 10;
+            });
+
+            // Save the PDF
+            doc.save(`statement_${currentAccountNumber}_${new Date().toISOString().split('T')[0]}.pdf`);
+            downloadModal.style.display = 'none';
+        }
+
+        // Show result message
+        function showResult(elementId, message, isSuccess) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = isSuccess ? 'result-message success' : 'result-message error';
+        }
+
+        // Update user data in localStorage
+        function updateUserData() {
+            localStorage.setItem('bankingUser', JSON.stringify(currentUser));
+
+            const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('bankingUsers', JSON.stringify(users));
+            }
+        }
+
+        // New function to show transaction slip
+        function showTransactionSlip(accountNumber, transaction) {
+            currentAccountNumber = accountNumber;
+            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
+            if (!account) return;
+
+            document.getElementById('slipModalTitle').textContent = `Transaction Slip - Account: ${accountNumber}`;
+
+            // Create slip content
+            let slipHTML = `
+                <div style="margin-bottom: 20px;">
+                    <p><strong>Account Number:</strong> ${accountNumber}</p>
+                    <p><strong>Account Type:</strong> ${account.type}</p>
+                    <p><strong>Transaction Date:</strong> ${new Date(transaction.timestamp).toLocaleString()}</p>
+                    <p><strong>Transaction Type:</strong> ${transaction.type.replace('_', ' ')}</p>
+                    <p><strong>Amount:</strong> R${transaction.amount.toFixed(2)}</p>
+                    ${transaction.relatedAccount ? `<p><strong>Related Account:</strong> ${transaction.relatedAccount}</p>` : ''}
+                    <p><strong>Balance After Transaction:</strong> R${transaction.balanceAfter.toFixed(2)}</p>
+                </div>
+                <hr>
+            `;
+
+            // Add recent transactions
+            const recentTransactions = account.transactions
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 5);
+
+            if (recentTransactions.length > 0) {
+                slipHTML += `<h3>Recent Transactions</h3>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Balance After</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+                recentTransactions.forEach(tx => {
+                    const isCredit = tx.type.includes('DEPOSIT') || tx.type.includes('TRANSFER_IN');
+                    slipHTML += `
+                        <tr>
+                            <td>${new Date(tx.timestamp).toLocaleDateString()}</td>
+                            <td>${tx.type.replace('_', ' ')}</td>
+                            <td class="${isCredit ? 'credit' : 'debit'}">${isCredit ? '+' : '-'}R${tx.amount.toFixed(2)}</td>
+                            <td>R${tx.balanceAfter.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                slipHTML += `</tbody></table>`;
+            }
+
+            slipTransactionList.innerHTML = slipHTML;
+            slipResult.textContent = 'Transaction completed successfully';
+            slipResult.className = 'result-message success';
+            transactionSlipModal.style.display = 'block';
+        }
+// Function to load accounts for the budget dropdown
+async function loadBudgetAccounts() {
+    if (!currentUserId) return;
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/accounts/user/${currentUserId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+            renderAccountDropdown(data.accounts, budgetAccountDropdown);
+            if (data.accounts.length > 0) {
+                loadBudgetData(data.accounts[0].id);
+            }
+        } else {
+            console.error('Failed to load accounts for budget page:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching user accounts for budget page:', error);
+    }
+}
+
+// Function to fetch and display budget data for an account
+async function loadBudgetData(accountId) {
+    if (!accountId) return;
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/budget/list-account?accountId=${accountId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+            renderBudgets(data.budgets);
+        } else {
+            console.error('Failed to load budgets:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching budget data:', error);
+    }
+}
+
+// Function to render the budget progress bars
+function renderBudgets(budgets) {
+    const budgetProgress = document.getElementById('budget-progress');
+    budgetProgress.innerHTML = '';
+
+    if (budgets.length === 0) {
+        budgetProgress.innerHTML = '<p>No budgets found for this account. Budgets will be automatically created when auto-allocation is enabled.</p>';
+        return;
+    }
+
+    let needsBudget = budgets.find(b => b.name === 'Needs');
+    let wantsBudget = budgets.find(b => b.name === 'Wants');
+    let savingsBudget = budgets.find(b => b.name === 'Savings');
+    
+    let html = '';
+    
+    if (needsBudget) {
+        const progressPercent = needsBudget.targetAmount > 0 ? 
+            Math.min(100, (needsBudget.currentAmount / needsBudget.targetAmount) * 100) : 0;
+        html += `
+            <div class="budget-progress-item">
+                <h4>Needs (70%)</h4>
+                <div class="budget-progress-bar">
+                    <div class="budget-progress-fill needs" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="budget-details">
+                    <span>R${needsBudget.currentAmount.toFixed(2)} / R${needsBudget.targetAmount.toFixed(2)}</span>
+                    <span>${progressPercent.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (wantsBudget) {
+        const progressPercent = wantsBudget.targetAmount > 0 ? 
+            Math.min(100, (wantsBudget.currentAmount / wantsBudget.targetAmount) * 100) : 0;
+        html += `
+            <div class="budget-progress-item">
+                <h4>Wants (20%)</h4>
+                <div class="budget-progress-bar">
+                    <div class="budget-progress-fill wants" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="budget-details">
+                    <span>R${wantsBudget.currentAmount.toFixed(2)} / R${wantsBudget.targetAmount.toFixed(2)}</span>
+                    <span>${progressPercent.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    if (savingsBudget) {
+        const progressPercent = savingsBudget.targetAmount > 0 ? 
+            Math.min(100, (savingsBudget.currentAmount / savingsBudget.targetAmount) * 100) : 0;
+        html += `
+            <div class="budget-progress-item">
+                <h4>Savings (10%)</h4>
+                <div class="budget-progress-bar">
+                    <div class="budget-progress-fill savings" style="width: ${progressPercent}%"></div>
+                </div>
+                <div class="budget-details">
+                    <span>R${savingsBudget.currentAmount.toFixed(2)} / R${savingsBudget.targetAmount.toFixed(2)}</span>
+                    <span>${progressPercent.toFixed(1)}%</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    budgetProgress.innerHTML = html;
+}
+        // Initialize the app
+        initApp();
     </script>
 </body>
 
