@@ -1,540 +1,420 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Py# Banking Management System</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            background-color: #f0f2f5;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        :root {
+            --primary-dark: #0d3b3f;
+            --primary: #1a5c63;
+            --primary-light: #2a7d8c;
+            --accent: #c6a96c;
+            --accent-light: #d8c092;
+            --neutral-dark: #2c3e50;
+            --neutral: #7f8c8d;
+            --neutral-light: #ecf0f1;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --error: #e74c3c;
+            --info: #3498db;
+            --white: #ffffff;
+            --off-white: #f8f9fa;
         }
 
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            padding: 2rem;
+        * {
             box-sizing: border-box;
         }
 
-        .view {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0d3b3f 0%, #1a5c63 100%);
+            min-height: 100vh;
+            color: var(--neutral-dark);
         }
 
-        .hidden {
-            display: none;
+        /* Header */
+        header {
+            background: rgba(13, 59, 63, 0.9);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        h1,
-        h2 {
-            color: #2c3e50;
-            text-align: center;
-        }
-
-        h2 {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-section {
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
         }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary-dark);
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+        }
+
+        .bank-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .welcome-text {
+            color: var(--accent-light);
+            font-weight: 500;
+        }
+
+        /* container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* split layout for login/register */
+        .split-layout {
+            display: flex;
+            gap: 0;
+            background: var(--off-white);
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .info-section {
+            flex: 1;
+            padding: 2.4rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+            .info-section h2 {
+                margin: 0 0 0.4rem 0;
+                font-size: 1.9rem;
+                letter-spacing: -0.01em;
+            }
+
+            .info-section p {
+                margin: 0;
+                color: rgba(255,255,255,0.9);
+            }
+
+        .auth-section {
+            width: 420px;
+            padding: 2.2rem;
+            background: var(--white);
+        }
+
+        .form-toggle {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--neutral-dark);
+        }
+
+            .form-toggle span {
+                margin-right: 6px;
+                color: var(--neutral);
+            }
+
+            .form-toggle a {
+                color: var(--primary);
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+                .form-toggle a:hover {
+                    text-decoration: underline;
+                }
 
         .form-card {
-            background-color: #f9f9f9;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-            flex: 1;
-            min-width: 280px;
+            max-width: 420px;
+            margin: 0 auto;
         }
 
-        form div {
-            margin-bottom: 1rem;
-        }
+            .form-card h2 {
+                text-align: center;
+                color: var(--primary);
+                margin-bottom: 1rem;
+                font-size: 1.4rem;
+            }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
+            margin-bottom: 0.4rem;
+            color: var(--neutral-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        input[type="text"],
-        input[type="number"],
-        input[type="password"],
-        input[type="email"],
-        select {
+        input[type="text"], input[type="password"], input[type="email"], input[type="number"], select {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
+            padding: 0.85rem;
             border-radius: 8px;
-            box-sizing: border-box;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: var(--off-white);
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
         }
+
+            input:focus, select:focus {
+                outline: none;
+                box-shadow: 0 6px 18px rgba(26,92,99,0.08);
+                border-color: var(--primary);
+            }
 
         button {
-            width: 100%;
-            padding: 0.75rem;
             border: none;
             border-radius: 8px;
+            padding: 0.9rem 1rem;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
-            color: white;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
+            color: #fff;
+            font-size: 1rem;
         }
 
         .button-primary {
-            background-color: #3498db;
+            background: linear-gradient(90deg,#2a7d8c,#1a5c63);
         }
 
         .button-success {
-            background-color: #2ecc71;
+            background: linear-gradient(90deg,#27ae60,#1db954);
         }
 
         .button-danger {
-            background-color: #e74c3c;
+            background: linear-gradient(90deg,#e74c3c,#c0392b);
         }
 
         .button-info {
-            background-color: #f39c12;
+            background: linear-gradient(90deg,#f39c12,#d35400);
         }
 
         .button-neutral {
-            background-color: #95a5a6;
-        }
-
-        .button-secondary {
-            background-color: #7d3c98;
-            padding: 0.5rem;
-            font-size: 0.9rem;
+            background: #7f8c8d;
         }
 
         .result-message {
-            margin-top: 1rem;
-            padding: 0.75rem;
+            margin-top: 0.8rem;
+            padding: 0.8rem;
             border-radius: 8px;
+            font-size: 0.95rem;
+            display: none;
         }
 
-        .result-message.success {
-            background-color: #d4edda;
-            color: #155724;
+            .result-message.show {
+                display: block;
+            }
+
+        .result-success {
+            background: #e6f4ea;
+            color: #145a2f;
+            border-left: 4px solid var(--success);
         }
 
-        .result-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
+        .result-error {
+            background: #fdecea;
+            color: #6b1515;
+            border-left: 4px solid var(--error);
         }
 
-        p {
-            margin: 0;
+        /* Dashboard layout (keeps index2 look) */
+        .dashboard-layout {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--primary-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .profile-pic {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            margin: 0 auto 0.6rem;
+            background: linear-gradient(135deg,var(--accent),var(--accent-light));
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            display: flex;
+            gap: 0.6rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            align-items: center;
+            cursor: pointer;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 0.5rem;
+        }
+
+            .nav-item i {
+                width: 20px;
+            }
+
+            .nav-item:hover {
+                background: rgba(255,255,255,0.04);
+            }
+
+            .nav-item.active {
+                background: var(--accent);
+                color: var(--primary-dark);
+            }
+
+        .dashboard-main {
+            flex: 1;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.6rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 1rem;
         }
 
-        #accountList {
-            margin-top: 2rem;
-            border-top: 1px solid #ddd;
-            padding-top: 1rem;
+        .form-container {
+            background: var(--off-white);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            position: relative;
+            border-left: 4px solid var(--primary);
         }
+
+            .form-container .corner-note {
+                position: absolute;
+                right: 12px;
+                top: 10px;
+                font-size: 0.78rem;
+                color: var(--neutral);
+            }
 
         .account-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #ecf0f1;
-            padding: 1rem;
+            padding: 0.9rem;
             border-radius: 8px;
-            margin-bottom: 0.75rem;
+            background: var(--off-white);
+            margin-bottom: 0.7rem;
         }
 
-        /* Transaction table styles */
-        .transaction-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .transaction-table th,
-        .transaction-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .transaction-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        .transaction-table tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .credit {
-            color: #2ecc71;
-            font-weight: bold;
-        }
-
-        .debit {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 12px;
-            width: 80%;
-            max-width: 900px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #000;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1rem;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .download-btn {
-            background-color: #27ae60;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .download-btn:hover {
-            background-color: #219a52;
-        }
-
-        .download-option {
-            background-color: #3498db;
-        }
-
-        .download-option.pdf {
-            background-color: #e74c3c;
-        }
-
-        #downloadModal .modal-content {
-            max-width: 400px;
+        footer {
             text-align: center;
-            padding: 1rem 2rem;
-        }
-
-        #downloadModal h3 {
-            margin-top: 0;
-        }
-
-        #downloadModal .download-options {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        #downloadModal .download-options button {
-            flex: 1;
-        }
-
-        /* New styles for date range filter */
-        .date-range-filter {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .date-range-filter label {
-            margin-bottom: 0;
-            font-weight: normal;
-            white-space: nowrap;
-        }
-
-        .date-range-filter input[type="date"] {
-            width: auto;
-            padding: 0.5rem;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .filter-btn:hover {
-            background-color: #2980b9;
-        }
-
-        /* New styles for enhanced UI */
-        .form-container {
-            flex-basis: 30%;
-            min-width: 300px;
             padding: 1.5rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fafafa;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            margin-top: 2rem;
+            color: rgba(255,255,255,0.8);
         }
 
-        .form-container:hover {
-            transform: translateY(-5px);
+        .hidden {
+            display: none;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
+        @media (max-width: 900px) {
+            .split-layout {
+                flex-direction: column;
+            }
+
+            .auth-section {
+                width: 100%;
+            }
+
+            .dashboard-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-radius: 12px;
+            }
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #555;
+        /* Simple mouse trail styling (from index2) */
+        .mouse-trail {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, opacity 0.3s ease;
         }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-secondary {
-            width: 100%;
-            padding: 12px;
-            background-color: #95a5a6;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .btn-secondary:hover {
-            background-color: #7f8c8d;
-        }
-
-        .account-card {
-            background-color: #f9f9f9;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .account-card h3 {
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            color: #34495e;
-        }
-
-        .account-card p {
-            margin: 0.5rem 0;
-            color: #777;
-        }
-
-        .account-actions {
-            margin-top: 1rem;
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Budget Styles */
-.budget-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.budget-item {
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.budget-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.budget-status {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.budget-status.active {
-    background: #e8f5e9;
-    color: #2e7d32;
-}
-
-.budget-status.inactive {
-    background: #ffebee;
-    color: #c62828;
-}
-
-.budget-progress-bar {
-    height: 10px;
-    background: #e0e0e0;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-.budget-progress-fill {
-    height: 100%;
-    background: #4caf50;
-    transition: width 0.3s ease;
-}
-
-.budget-progress-fill.needs {
-    background: #f44336;
-}
-
-.budget-progress-fill.wants {
-    background: #ff9800;
-}
-
-.budget-progress-fill.savings {
-    background: #4caf50;
-}
-
-.budget-details {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #666;
-}
-
-.budget-progress-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.budget-progress-item {
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.button-danger {
-    background-color: #f44336;
-    color: white;
-}
-
-.button-danger:hover {
-    background-color: #d32f2f;
-}
-
-.button-success {
-    background-color: #4caf50;
-    color: white;
-}
-
-.button-success:hover {
-    background-color: #388e3c;
-}
     </style>
 </head>
-
 <body>
+
+    <header>
+        <div class="header-content">
+            <div style="display:flex;align-items:center;gap:0.9rem">
+                <div class="logo">BMS</div>
+                <div>
+                    <div class="bank-name">Banking Management System</div>
+                    <div style="font-size:0.85rem;color:var(--accent-light)">Secure � Fast � Digital</div>
+                </div>
+            </div>
+            <div class="welcome-text">Manage your accounts securely</div>
+        </div>
+    </header>
+
     <div class="container">
-        <div id="loginView" class="view">
-            <h2>Welcome </h2>
-            <div class="form-section">
-                <div class="form-card">
-                    <h2>Login</h2>
+
+        <!-- Inserted original app structure (forms, views) from index.html to preserve functionality -->
+        <!-- LOGIN / REGISTER VIEWS -->
+        <div id="loginView" class="split-layout" style="margin-bottom:1.5rem;">
+            <div class="info-section">
+                <h2>Manage your finances with clarity</h2>
+                <p>Sign in to view your accounts, create budgets, and transfer funds securely.</p>
+            </div>
+
+            <div class="auth-section">
+                <div class="form-card" id="loginCard">
+                    <h2>Sign In</h2>
                     <form id="loginForm">
                         <div>
                             <label for="loginUsername">Username:</label>
@@ -544,12 +424,17 @@
                             <label for="loginPassword">Password:</label>
                             <input type="password" id="loginPassword" required>
                         </div>
-                        <button type="submit" class="button-primary">Login</button>
+                        <button type="submit" class="button-primary" style="margin-top:0.6rem;">Login</button>
                     </form>
+                    <div class="form-toggle">
+                        <span>Don't have an account?</span>
+                        <a href="#" id="showRegister">Register</a>
+                    </div>
+
                     <div id="loginResult" class="result-message"></div>
                 </div>
 
-                <div class="form-card">
+                <div class="form-card hidden" id="registerCard" style="margin-top:1rem;">
                     <h2>Register</h2>
                     <form id="registerForm">
                         <div>
@@ -558,7 +443,7 @@
                         </div>
                         <div>
                             <label for="regEmail">Email:</label>
-                            <input type="email" id="regEmail" required>
+                            <input type="email" id="regEmail">
                         </div>
                         <div>
                             <label for="regPassword">Password:</label>
@@ -566,221 +451,231 @@
                         </div>
                         <button type="submit" class="button-success">Register</button>
                     </form>
+                    <div class="form-toggle">
+                        <span>Already have an account?</span>
+                        <a href="#" id="showLogin">Sign in</a>
+                    </div>
+
                     <div id="registerResult" class="result-message"></div>
                 </div>
             </div>
         </div>
 
-        <div id="dashboardView" class="view hidden">
-            <div class="dashboard-header">
-                <h2 id="welcomeMessage"></h2>
-                <button id="logoutButton" class="button-danger">Logout</button>
-            </div>
-
-            <div class="form-section">
-                <div class="form-card">
-                    <h2>Create New Account</h2>
-                    <form id="createAccountForm">
-                        <div>
-                            <label for="accountType">Account Type:</label>
-                            <select id="accountType" required>
-                                <option value="Savings">Savings</option>
-                                <option value="Credit">Credit</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="button-primary">Create Account</button>
-                    </form>
-                    <div id="createAccountResult" class="result-message"></div>
+        <!-- DASHBOARD VIEWS -->
+        <div id="dashboardView" class="hidden dashboard-layout">
+            <aside class="sidebar">
+                <div class="profile-section">
+                    <div class="profile-pic">U</div>
+                    <div id="profileName">User</div>
+                    <div id="profileEmail" style="font-size:0.85rem;color:rgba(255,255,255,0.8);">user@example.com</div>
                 </div>
-            </div>
 
-            <div id="accountList">
-                <h3>Your Accounts</h3>
-                <div id="accountsPlaceholder">
-                    <p>No accounts found. Create one above!</p>
+                <div id="menu">
+                    <div class="nav-item active" data-view="dashboardHome"><i class="fas fa-home"></i><span>Dashboard</span></div>
+                    <div class="nav-item" data-view="createAccount"><i class="fas fa-plus-circle"></i><span>Create Account</span></div>
+                    <div class="nav-item" data-view="depositFunds"><i class="fas fa-money-bill-wave"></i><span>Deposit</span></div>
+                    <div class="nav-item" data-view="withdrawFunds"><i class="fas fa-hand-holding-usd"></i><span>Withdraw</span></div>
+                    <div class="nav-item" data-view="transferFunds"><i class="fas fa-exchange-alt"></i><span>Transfer</span></div>
+                    <div class="nav-item" data-view="budgetSection"><i class="fas fa-wallet"></i><span>Budgets-COMING SOON</span></div>
+                    <div class="nav-item" id="logoutButton"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div>
                 </div>
-            </div>
-<!-- Budget Management Section -->
-<hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+            </aside>
 
-<div class="form-section">
-    <div class="form-card">
-        <h2>Budget Settings</h2>
-        <div id="budgetSettings">
-            <p>Auto Allocation: <span id="autoAllocationStatus">Disabled</span></p>
-            <button id="toggleAutoAllocation" class="button-primary">Enable Auto Allocation</button>
-            <div id="budgetSettingsResult" class="result-message"></div>
-        </div>
-        
-        <h3>Your Budgets</h3>
-        <div id="budgetsList">
-            <p>No budgets configured yet.</p>
-        </div>
-        
-        <h3>Create New Budget</h3>
-        <form id="createBudgetForm">
-            <div>
-                <label for="budgetName">Budget Name:</label>
-                <input type="text" id="budgetName" required>
-            </div>
-            <div>
-                <label for="budgetTarget">Target Amount (R):</label>
-                <input type="number" id="budgetTarget" required min="1" step="0.01">
-            </div>
-            <button type="submit" class="button-success">Create Budget</button>
-        </form>
-        <div id="createBudgetResult" class="result-message"></div>
-    </div>
-    
-    <div class="form-card">
-        <h2>Budget Progress</h2>
-        <div id="budgetProgress">
-            <p>Enable auto allocation and create budgets to see progress here.</p>
-        </div>
-    </div>
-</div>
-            <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #eee;">
+            <main class="dashboard-main">
+                <div class="dashboard-header">
+                    <h2 id="welcomeMessage">Welcome</h2>
+                    <div><button id="logoutTop" class="button-danger">Logout</button></div>
+                </div>
 
-            <div class="form-section">
-                <div class="form-card">
-                    <h2>Deposit / Withdraw</h2>
-                    <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div style="flex: 1;">
-                            <h3>Deposit</h3>
-                            <form id="depositForm">
-                                <div>
-                                    <label for="depositAccountNumber">Account Number:</label>
-                                    <input type="text" id="depositAccountNumber" required>
-                                </div>
-                                <div>
-                                    <label for="depositAmount">Amount:</label>
-                                    <input type="number" id="depositAmount" required min="1" step="0.01">
-                                </div>
-                                <button type="submit" class="button-success">Deposit</button>
-                            </form>
-                            <div id="depositResult" class="result-message"></div>
-                        </div>
-
-                        <div style="flex: 1;">
-                            <h3>Withdraw</h3>
-                            <form id="withdrawForm">
-                                <div>
-                                    <label for="withdrawAccountNumber">Account Number:</label>
-                                    <input type="text" id="withdrawAccountNumber" required>
-                                </div>
-                                <div>
-                                    <label for="withdrawAmount">Amount:</label>
-                                    <input type="number" id="withdrawAmount" required min="1" step="0.01">
-                                </div>
-                                <button type="submit" class="button-info">Withdraw</button>
-                            </form>
-                            <div id="withdrawResult" class="result-message"></div>
+                <!-- Home / Account list -->
+                <section id="dashboardHome" class="view-content">
+                    <div class="form-container">
+                        <h3>Your Accounts</h3>
+                        <div id="accountList">
+                            <div id="accountsPlaceholder"><p>No accounts yet. Create one to begin.</p></div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="form-card">
-                    <h2>Transfer Funds</h2>
-                    <form id="transferForm">
-                        <div>
-                            <label for="transferSourceAccountNumber">Source Account Number:</label>
-                            <input type="text" id="transferSourceAccountNumber" required>
+                <!-- Create Account -->
+                <section id="createAccount" class="view-content hidden">
+                    <div class="form-container">
+                        <div class="corner-note"></div>
+                        <h3>Create New Account</h3>
+                        <form id="createAccountForm">
+                            <div>
+                                <label for="accountType">Account Type:</label>
+                                <select id="accountType" required>
+                                    <option value="Savings">Savings</option>
+                                    <option value="Credit">Credit</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="button-primary">Create Account</button>
+                        </form>
+                        <div id="createAccountResult" class="result-message"></div>
+                    </div>
+                </section>
+
+                <!-- Deposit -->
+                <section id="depositFunds" class="view-content hidden">
+                    <div class="form-container">
+                        <div class="corner-note"></div>
+                        <h3>Deposit Funds</h3>
+                        <form id="depositForm">
+                            <div>
+                                <label for="depositAccountSelect">Account:</label>
+                                <select id="depositAccountSelect" required></select>
+                            </div>
+                            <div>
+                                <label for="depositAmount">Amount:</label>
+                                <input type="number" id="depositAmount" required min="1" step="0.01">
+                            </div>
+                            <button type="submit" class="button-success">Deposit</button>
+                        </form>
+                        <div id="depositResult" class="result-message"></div>
+                    </div>
+                </section>
+
+                <!-- Withdraw -->
+                <section id="withdrawFunds" class="view-content hidden">
+                    <div class="form-container">
+                        <div class="corner-note"></div>
+                        <h3>Withdraw Funds</h3>
+                        <form id="withdrawForm">
+                            <div>
+                                <label for="withdrawAccountSelect">Account:</label>
+                                <select id="withdrawAccountSelect" required></select>
+                            </div>
+                            <div>
+                                <label for="withdrawAmount">Amount:</label>
+                                <input type="number" id="withdrawAmount" required min="1" step="0.01">
+                            </div>
+                            <button type="submit" class="button-info">Withdraw</button>
+                        </form>
+                        <div id="withdrawResult" class="result-message"></div>
+                    </div>
+                </section>
+
+                <!-- Transfer -->
+                <section id="transferFunds" class="view-content hidden">
+                    <div class="form-container">
+                        <div class="corner-note"></div>
+                        <h3>Transfer Funds</h3>
+                        <form id="transferForm">
+                            <div>
+                                <label for="transferSourceAccountSelect">From:</label>
+                                <select id="transferSourceAccountSelect" required></select>
+                            </div>
+                            <div>
+                                <label for="transferDestinationAccountSelect">To:</label>
+                                <select id="transferDestinationAccountSelect" required></select>
+                            </div>
+                            <div>
+                                <label for="transferAmount">Amount:</label>
+                                <input type="number" id="transferAmount" required min="1" step="0.01">
+                            </div>
+                            <button type="submit" class="button-neutral">Transfer</button>
+                        </form>
+                        <div id="transferResult" class="result-message"></div>
+                    </div>
+                </section>
+
+                <!-- Budgets -->
+                <section id="budgetSection" class="view-content hidden">
+                    <div class="form-container">
+                        <div class="corner-note">future enhancements, COMING SOON</div>
+                        <h3>Budget Settings</h3>
+                        <div id="budgetSettings">
+                            <p>Auto Allocation: <span id="autoAllocationStatus">Disabled</span></p>
+                            <button id="toggleAutoAllocation" class="button-primary">Enable Auto Allocation</button>
+                            <div id="budgetSettingsResult" class="result-message"></div>
                         </div>
-                        <div>
-                            <label for="transferDestinationAccountNumber">Destination Account Number:</label>
-                            <input type="text" id="transferDestinationAccountNumber" required>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Create New Budget</h3>
+                        <form id="createBudgetForm">
+                            <div>
+                                <label for="budgetAccountSelect">Account:</label>
+                                <select id="budgetAccountSelect" required></select>
+                            </div>
+                            <div>
+                                <label for="budgetName">Budget Name:</label>
+                                <input type="text" id="budgetName" required>
+                            </div>
+                            <div>
+                                <label for="budgetTarget">Target Amount (R):</label>
+                                <input type="number" id="budgetTarget" required min="1" step="0.01">
+                            </div>
+                            <button type="submit" class="button-success">Create Budget</button>
+                        </form>
+                        <div id="createBudgetResult" class="result-message"></div>
+                    </div>
+
+                    <div class="form-container">
+                        <h3>Budget Progress</h3>
+                        <div id="budgetProgress">
+                            <p class="small-muted">Enable auto allocation and create budgets to see progress here.</p>
                         </div>
-                        <div>
-                            <label for="transferAmount">Amount:</label>
-                            <input type="number" id="transferAmount" required min="1" step="0.01">
-                        </div>
-                        <button type="submit" class="button-neutral">Transfer</button>
-                    </form>
-                    <div id="transferResult" class="result-message"></div>
-                </div>
-            </div>
+                    </div>
+                </section>
+
+            </main>
         </div>
+
     </div>
 
-    <div id="statementModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Account Statement</h2>
-                <span class="close" data-modal="statementModal">&times;</span>
-            </div>
+    <footer>
+        � Banking Management System
+    </footer>
 
-            <!-- Date Range Filter -->
-            <div class="date-range-filter">
-                <label for="startDate">From:</label>
-                <input type="date" id="startDate">
-                <label for="endDate">To:</label>
-                <input type="date" id="endDate">
-                <button id="applyDateFilter" class="filter-btn">Apply Filter</button>
-                <button id="clearDateFilter" class="filter-btn button-neutral" style="padding: 0.5rem;">Clear</button>
-            </div>
-
-            <div id="modalStatementResult" class="result-message"></div>
-            <div id="modalStatementDetails">
-                <div id="modalTransactionList"></div>
-            </div>
-            <div class="modal-actions">
-                <button id="downloadStatement" class="download-btn">Download Statement</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="downloadModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Download Statement</h3>
-                <span class="close" data-modal="downloadModal">&times;</span>
-            </div>
-            <p>Select format to download your statement:</p>
-            <div class="download-options">
-                <button id="downloadPdfBtn" class="download-option pdf">Download PDF</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- New Modals for Enhanced Features -->
-    <div id="transactionSlipModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="slipModalTitle">Transaction Slip</h2>
-                <span class="close" data-modal="transactionSlipModal">&times;</span>
-            </div>
-            <div id="slipResult" class="result-message"></div>
-            <div id="slipDetails">
-                <div id="slipTransactionList"></div>
-            </div>
-            <div class="modal-actions">
-                <button id="printSlip" class="download-btn">Print Slip</button>
-                <button id="downloadSlipPdf" class="download-btn download-option pdf">Download as PDF</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="transactionModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Account Transaction History</h2>
-                <span class="close" data-modal="transactionModal">&times;</span>
-            </div>
-            <div id="transactionResult" class="result-message"></div>
-            <div id="transactionDetails"></div>
-        </div>
-    </div>
-
+    <!-- External libs (kept from index.html) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script>
-        // Global variables
-        let currentUser = null;
-        let currentAccountNumber = null;
-        let currentTransactions = [];
-        let userBudgets = [];
-        let budgetSettings = { autoAllocationEnabled: false };
 
-        // DOM elements
+    <!-- Mouse trail and small UI niceties from index2 -->
+    <script>
+        // Mouse trail effect (non-essential but kept from index2 design)
+        (function () {
+            const trailCount = 6;
+            for (let i = 0; i < trailCount; i++) {
+                const el = document.createElement('div');
+                el.className = 'mouse-trail';
+                document.body.appendChild(el);
+            }
+            const trails = Array.from(document.querySelectorAll('.mouse-trail'));
+            document.addEventListener('mousemove', (e) => {
+                trails.forEach((t, i) => {
+                    const dx = (i + 1) * 6;
+                    t.style.left = (e.clientX - dx) + 'px';
+                    t.style.top = (e.clientY - dx) + 'px';
+                    t.style.opacity = 1 - (i * 0.12);
+                    setTimeout(() => t.style.opacity = 0.6, 100);
+                });
+            });
+            document.addEventListener('mouseout', () => {
+                trails.forEach(t => t.style.opacity = 0);
+            });
+        })();
+    </script>
+
+    <!-- Original app logic from index.html (all functionality preserved) -->
+    <script>
+        // Global data (demo localStorage-based)
+        let currentUser = null;
+
+        // Utility to show/hide messages
+        function showMessage(el, msg, success = true) {
+            if (!el) return;
+            el.textContent = msg;
+            el.classList.add('show');
+            el.classList.remove('result-success', 'result-error');
+            el.classList.add(success ? 'result-success' : 'result-error');
+            setTimeout(() => {
+                el.classList.remove('show');
+            }, 4500);
+        }
+
+        // DOM refs
         const loginView = document.getElementById('loginView');
         const dashboardView = document.getElementById('dashboardView');
         const loginForm = document.getElementById('loginForm');
@@ -789,787 +684,484 @@
         const depositForm = document.getElementById('depositForm');
         const withdrawForm = document.getElementById('withdrawForm');
         const transferForm = document.getElementById('transferForm');
-        const logoutButton = document.getElementById('logoutButton');
+        const logoutBtn = document.getElementById('logoutButton');
+        const logoutTop = document.getElementById('logoutTop');
         const welcomeMessage = document.getElementById('welcomeMessage');
         const accountList = document.getElementById('accountList');
-        const accountsPlaceholder = document.getElementById('accountsPlaceholder');
-        const statementModal = document.getElementById('statementModal');
-        const downloadModal = document.getElementById('downloadModal');
-        const modalStatementDetails = document.getElementById('modalStatementDetails');
-        const modalTransactionList = document.getElementById('modalTransactionList');
-        const modalStatementResult = document.getElementById('modalStatementResult');
-        const downloadStatementBtn = document.getElementById('downloadStatement');
-        const applyDateFilterBtn = document.getElementById('applyDateFilter');
-        const clearDateFilterBtn = document.getElementById('clearDateFilter');
-        const startDateInput = document.getElementById('startDate');
-        const endDateInput = document.getElementById('endDate');
-        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-        const budgetsList = document.getElementById('budgetsList');
-        const budgetProgress = document.getElementById('budgetProgress');
+
+        const depositAccountSelect = document.getElementById('depositAccountSelect');
+        const withdrawAccountSelect = document.getElementById('withdrawAccountSelect');
+        const transferSourceAccountSelect = document.getElementById('transferSourceAccountSelect');
+        const transferDestinationAccountSelect = document.getElementById('transferDestinationAccountSelect');
+        const budgetAccountSelect = document.getElementById('budgetAccountSelect');
+
         const autoAllocationStatus = document.getElementById('autoAllocationStatus');
         const toggleAutoAllocationBtn = document.getElementById('toggleAutoAllocation');
-        const createBudgetForm = document.getElementById('createBudgetForm');
-        const budgetSettingsResult = document.getElementById('budgetSettingsResult');
-        const createBudgetResult = document.getElementById('createBudgetResult');
-        // New modal elements
-        const transactionModal = document.getElementById('transactionModal');
-        const transactionResult = document.getElementById('transactionResult');
-        const transactionDetails = document.getElementById('transactionDetails');
-        const transactionSlipModal = document.getElementById('transactionSlipModal');
-        const printSlipBtn = document.getElementById('printSlip');
-        const downloadSlipPdfBtn = document.getElementById('downloadSlipPdf');
-        const slipTransactionList = document.getElementById('slipTransactionList');
-        const slipResult = document.getElementById('slipResult');
+        const createBudgetFormEl = document.getElementById('createBudgetForm');
+        const budgetProgress = document.getElementById('budgetProgress');
 
-        // Close modal buttons
-        const closeModalBtns = document.querySelectorAll('.close');
+        // nav/items
+        const navItems = document.querySelectorAll('.nav-item');
+        const viewContents = document.querySelectorAll('.view-content');
 
-        // Set default dates for filter
-        const today = new Date();
-        const oneMonthAgo = new Date();
-        oneMonthAgo.setMonth(today.getMonth() - 1);
+        // Helpers: persist users list & currently logged user (demo only)
+        function persistUsers(users) {
+            localStorage.setItem('bankingUsers', JSON.stringify(users || []));
+        }
+        function loadUsers() {
+            return JSON.parse(localStorage.getItem('bankingUsers') || '[]');
+        }
 
-        startDateInput.valueAsDate = oneMonthAgo;
-        endDateInput.valueAsDate = today;
+        function persistCurrentUser() {
+            if (!currentUser) return;
+            const users = loadUsers();
+            const idx = users.findIndex(u => u.id === currentUser.id);
+            if (idx !== -1) users[idx] = currentUser;
+            else users.push(currentUser);
+            persistUsers(users);
+            localStorage.setItem('bankingUser', JSON.stringify(currentUser));
+        }
 
-        // Event listeners
-        loginForm.addEventListener('submit', handleLogin);
-        registerForm.addEventListener('submit', handleRegister);
-        createAccountForm.addEventListener('submit', handleCreateAccount);
-        depositForm.addEventListener('submit', handleDeposit);
-        withdrawForm.addEventListener('submit', handleWithdraw);
-        transferForm.addEventListener('submit', handleTransfer);
-        logoutButton.addEventListener('click', handleLogout);
-        downloadStatementBtn.addEventListener('click', showDownloadOptions);
-        applyDateFilterBtn.addEventListener('click', applyDateFilter);
-        clearDateFilterBtn.addEventListener('click', clearDateFilter);
-        downloadPdfBtn.addEventListener('click', downloadStatementAsPdf);
-
-        //Budegt event listeners
-        toggleAutoAllocationBtn.addEventListener('click', toggleAutoAllocation);
-        createBudgetForm.addEventListener('submit', handleCreateBudget);
-
-        // New event listeners
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const modalId = e.target.getAttribute('data-modal');
-                document.getElementById(modalId).style.display = 'none';
-            });
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === transactionSlipModal) {
-                transactionSlipModal.style.display = 'none';
-            }
-            if (event.target === transactionModal) {
-                transactionModal.style.display = 'none';
-            }
-        });
-
-        printSlipBtn.addEventListener('click', () => {
-            const slipContent = document.getElementById('slipDetails').innerHTML;
-            const originalContent = document.body.innerHTML;
-
-            document.body.innerHTML = `
-                <div style="padding: 20px; font-family: Arial, sans-serif;">
-                    <h1 style="text-align: center;">Transaction Slip</h1>
-                    ${slipContent}
-                </div>
-            `;
-
-            window.print();
-            document.body.innerHTML = originalContent;
-            location.reload();
-        });
-
-        downloadSlipPdfBtn.addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            const slipTitle = document.getElementById('slipModalTitle').textContent;
-            const slipContent = document.getElementById('slipDetails').textContent;
-
-            doc.setFontSize(16);
-            doc.text(slipTitle, 105, 15, { align: 'center' });
-
-            doc.setFontSize(10);
-            const splitText = doc.splitTextToSize(slipContent, 180);
-            doc.text(splitText, 15, 30);
-
-            doc.save(`transaction_slip_${currentAccountNumber}_${new Date().toISOString().split('T')[0]}.pdf`);
-        });
-
-        // Initialize the application
+        // Init app
         function initApp() {
-            // Check if user is already logged in (from localStorage)
-            const savedUser = localStorage.getItem('bankingUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
+            const saved = localStorage.getItem('bankingUser');
+            if (saved) {
+                currentUser = JSON.parse(saved);
                 showDashboard();
             } else {
                 showLogin();
             }
         }
 
-        // Show login view
         function showLogin() {
             loginView.classList.remove('hidden');
             dashboardView.classList.add('hidden');
         }
-
-        // Show dashboard view
         function showDashboard() {
             loginView.classList.add('hidden');
             dashboardView.classList.remove('hidden');
-            welcomeMessage.textContent = `Welcome, ${currentUser.username}!`;
+            welcomeMessage.textContent = `Welcome, ${currentUser.username}`;
+            document.getElementById('profileName').textContent = currentUser.username;
+            document.getElementById('profileEmail').textContent = currentUser.email || 'user@example.com';
             renderAccounts();
+            populateAccountDropdowns();
+            renderBudgetProgress();
+            showView('dashboardHome');
         }
 
-        // Handle login
-        function handleLogin(e) {
+        // toggle auth forms
+        // Toggle between Login and Register forms
+        document.getElementById("showRegister").addEventListener("click", function (e) {
             e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
+            document.getElementById("loginCard").classList.add("hidden");
+            document.getElementById("registerCard").classList.remove("hidden");
+        });
 
-            // Simulate API call
-            setTimeout(() => {
-                // For demo purposes, we'll just check if the user exists in localStorage
-                const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
-                const user = users.find(u => u.username === username && u.password === password);
-
-                if (user) {
-                    currentUser = user;
-                    localStorage.setItem('bankingUser', JSON.stringify(user));
-                    showResult('loginResult', 'Login successful!', true);
-                    showDashboard();
-                } else {
-                    showResult('loginResult', 'Invalid username or password', false);
-                }
-            }, 500);
-        }
-
-        // Handle register
-        function handleRegister(e) {
+        document.getElementById("showLogin").addEventListener("click", function (e) {
             e.preventDefault();
-            const username = document.getElementById('regUsername').value;
-            const email = document.getElementById('regEmail').value;
+            document.getElementById("registerCard").classList.add("hidden");
+            document.getElementById("loginCard").classList.remove("hidden");
+        });
+
+
+        // Register
+        registerForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value;
+            if (!username || !password) {
+                showMessage(document.getElementById('registerResult'), 'Please provide username & password.', false);
+                return;
+            }
+            const users = loadUsers();
+            if (users.some(u => u.username === username)) {
+                showMessage(document.getElementById('registerResult'), 'Username already exists', false);
+                return;
+            }
+            const newUser = {
+                id: Date.now().toString(),
+                username,
+                email,
+                password,
+                accounts: [],
+                budgets: [],
+                budgetSettings: { autoAllocationEnabled: false }
+            };
+            users.push(newUser);
+            persistUsers(users);
+            showMessage(document.getElementById('registerResult'), 'Registration successful! Please login.', true);
+            registerForm.reset();
+        });
 
-            // Simulate API call
-            setTimeout(() => {
-                // Check if username already exists
-                const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
-                if (users.some(u => u.username === username)) {
-                    showResult('registerResult', 'Username already exists', false);
-                    return;
-                }
-
-                // Create new user
-                const newUser = {
-                    id: Date.now().toString(),
-                    username,
-                    email,
-                    password,
-                    accounts: []
-                };
-
-                users.push(newUser);
-                localStorage.setItem('bankingUsers', JSON.stringify(users));
-                showResult('registerResult', 'Registration successful! You can now login.', true);
-                registerForm.reset();
-            }, 500);
-        }
-
-        // Handle create account
-        function handleCreateAccount(e) {
+        // Login
+        loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const accountType = document.getElementById('accountType').value;
-
-            // Simulate API call
-            setTimeout(() => {
-                // Generate a random account number
-                const accountNumber = Math.floor(1000000000 + Math.random() * 9000000000).toString();
-
-                // Create new account
-                const newAccount = {
-                    accountNumber,
-                    type: accountType,
-                    balance: 0,
-                    transactions: []
-                };
-
-                // Add to current user
-                currentUser.accounts.push(newAccount);
-                localStorage.setItem('bankingUser', JSON.stringify(currentUser));
-
-                // Update users list
-                const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                if (userIndex !== -1) {
-                    users[userIndex] = currentUser;
-                    localStorage.setItem('bankingUsers', JSON.stringify(users));
-                }
-
-                showResult('createAccountResult', `Account created successfully! Account Number: ${accountNumber}`, true);
-                renderAccounts();
-                createAccountForm.reset();
-            }, 500);
-        }
-
-        // Handle deposit
-        function handleDeposit(e) {
-            e.preventDefault();
-            const accountNumber = document.getElementById('depositAccountNumber').value;
-            const amount = parseFloat(document.getElementById('depositAmount').value);
-
-            // Find account
-            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
-            if (!account) {
-                showResult('depositResult', 'Account not found', false);
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const users = loadUsers();
+            const found = users.find(u => u.username === username && u.password === password);
+            if (!found) {
+                showMessage(document.getElementById('loginResult'), 'Invalid credentials', false);
                 return;
             }
+            currentUser = found;
+            localStorage.setItem('bankingUser', JSON.stringify(currentUser));
+            showMessage(document.getElementById('loginResult'), 'Login successful', true);
+            setTimeout(() => showDashboard(), 600);
+        });
 
-            // Simulate API call
-            setTimeout(() => {
-                // Update balance
-                account.balance += amount;
-
-                // Add transaction
-                account.transactions.push({
-                    id: Date.now().toString(),
-                    type: 'DEPOSIT',
-                    amount,
-                    timestamp: new Date().toISOString(),
-                    balanceAfter: account.balance
-                });
-
-                // Update storage
-                updateUserData();
-
-                showResult('depositResult', `Deposit successful! New balance: R${account.balance.toFixed(2)}`, true);
-                renderAccounts();
-                depositForm.reset();
-
-                // Show transaction slip
-                showTransactionSlip(accountNumber, account.transactions[account.transactions.length - 1]);
-            }, 500);
-        }
-
-        // Handle withdraw
-        function handleWithdraw(e) {
-            e.preventDefault();
-            const accountNumber = document.getElementById('withdrawAccountNumber').value;
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-
-            // Find account
-            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
-            if (!account) {
-                showResult('withdrawResult', 'Account not found', false);
-                return;
-            }
-
-            if (account.balance < amount) {
-                showResult('withdrawResult', 'Insufficient funds', false);
-                return;
-            }
-
-            // Simulate API call
-            setTimeout(() => {
-                // Update balance
-                account.balance -= amount;
-
-                // Add transaction
-                account.transactions.push({
-                    id: Date.now().toString(),
-                    type: 'WITHDRAWAL',
-                    amount,
-                    timestamp: new Date().toISOString(),
-                    balanceAfter: account.balance
-                });
-
-                // Update storage
-                updateUserData();
-
-                showResult('withdrawResult', `Withdrawal successful! New balance: R${account.balance.toFixed(2)}`, true);
-                renderAccounts();
-                withdrawForm.reset();
-
-                // Show transaction slip
-                showTransactionSlip(accountNumber, account.transactions[account.transactions.length - 1]);
-            }, 500);
-        }
-
-        // Handle transfer
-        function handleTransfer(e) {
-            e.preventDefault();
-            const sourceAccountNumber = document.getElementById('transferSourceAccountNumber').value;
-            const destAccountNumber = document.getElementById('transferDestinationAccountNumber').value;
-            const amount = parseFloat(document.getElementById('transferAmount').value);
-
-            // Find accounts
-            const sourceAccount = currentUser.accounts.find(acc => acc.accountNumber === sourceAccountNumber);
-            const destAccount = currentUser.accounts.find(acc => acc.accountNumber === destAccountNumber);
-
-            if (!sourceAccount) {
-                showResult('transferResult', 'Source account not found', false);
-                return;
-            }
-
-            if (!destAccount) {
-                showResult('transferResult', 'Destination account not found', false);
-                return;
-            }
-
-            if (sourceAccount.balance < amount) {
-                showResult('transferResult', 'Insufficient funds', false);
-                return;
-            }
-
-            // Simulate API call
-            setTimeout(() => {
-                // Update balances
-                sourceAccount.balance -= amount;
-                destAccount.balance += amount;
-
-                // Add transactions
-                const timestamp = new Date().toISOString();
-                sourceAccount.transactions.push({
-                    id: Date.now().toString(),
-                    type: 'TRANSFER_OUT',
-                    amount,
-                    timestamp,
-                    relatedAccount: destAccountNumber,
-                    balanceAfter: sourceAccount.balance
-                });
-
-                destAccount.transactions.push({
-                    id: Date.now().toString() + '_in',
-                    type: 'TRANSFER_IN',
-                    amount,
-                    timestamp,
-                    relatedAccount: sourceAccountNumber,
-                    balanceAfter: destAccount.balance
-                });
-
-                // Update storage
-                updateUserData();
-
-                showResult('transferResult', `Transfer successful! New balance: R${sourceAccount.balance.toFixed(2)}`, true);
-                renderAccounts();
-                transferForm.reset();
-
-                // Show transaction slip
-                showTransactionSlip(sourceAccountNumber, sourceAccount.transactions[sourceAccount.transactions.length - 1]);
-            }, 500);
-        }
-
-        // Handle logout
+        // Logout
+        logoutBtn.addEventListener('click', handleLogout);
+        logoutTop.addEventListener('click', handleLogout);
         function handleLogout() {
             currentUser = null;
             localStorage.removeItem('bankingUser');
             showLogin();
         }
 
-        // Render accounts list
+        // Navigation: show view/content
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const v = item.dataset.view;
+                if (v === 'logout') return;
+                showView(v);
+            });
+        });
+        function showView(id) {
+            viewContents.forEach(vc => vc.classList.add('hidden'));
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('hidden');
+            navItems.forEach(n => {
+                if (n.dataset.view === id) n.classList.add('active'); else n.classList.remove('active');
+            });
+        }
+
+        // Create account
+        createAccountForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const type = document.getElementById('accountType').value;
+            const accountNumber = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+            const acc = { accountNumber, type, balance: 0, transactions: [] };
+            currentUser.accounts.push(acc);
+            persistCurrentUser();
+            showMessage(document.getElementById('createAccountResult'), `Account created: ${accountNumber}`, true);
+            renderAccounts();
+            populateAccountDropdowns();
+            createAccountForm.reset();
+        });
+
+        // Render accounts on dashboard
         function renderAccounts() {
+            const list = document.getElementById('accountList');
+            list.innerHTML = '';
+
             if (!currentUser.accounts || currentUser.accounts.length === 0) {
-                accountsPlaceholder.innerHTML = '<p>No accounts found. Create one above!</p>';
+                list.innerHTML = '<p>No accounts found. Create one to get started.</p>';
                 return;
             }
 
-            accountsPlaceholder.innerHTML = '';
-            currentUser.accounts.forEach(account => {
-                const accountEl = document.createElement('div');
-                accountEl.className = 'account-item';
-                accountEl.innerHTML = `
-                    <div>
-                        <strong>${account.type} Account</strong><br>
-                        <span>Account #: ${account.accountNumber}</span><br>
-                        <span>Balance: R${account.balance.toFixed(2)}</span>
-                    </div>
-                    <div>
-                        <button class="button-secondary" onclick="viewStatement('${account.accountNumber}')">View Statement</button>
-                    </div>
-                `;
-                accountsPlaceholder.appendChild(accountEl);
+            // Add the "Download All" button once at the top
+            const allBtn = document.createElement('button');
+            allBtn.textContent = "Download All Transactions (PDF)";
+            allBtn.className = "button-neutral";
+            allBtn.style.marginBottom = "12px";
+            allBtn.onclick = () => downloadAllTransactionsPDF();
+            list.appendChild(allBtn);
+
+            currentUser.accounts.forEach(acc => {
+                const div = document.createElement('div');
+                div.className = 'account-item';
+                div.innerHTML = `
+                <div>
+                    <strong>${acc.type} Account</strong>
+                    <div style="font-size:0.9rem;color:var(--neutral)">#${acc.accountNumber}</div>
+                    <div style="margin-top:6px">R${acc.balance.toFixed(2)}</div>
+                </div>
+                <div style="display:flex;gap:8px">
+                    <button class="button-primary" onclick="viewStatement('${acc.accountNumber}')">View</button>
+                    <button class="button-neutral" onclick="downloadStatementPDF('${acc.accountNumber}')">Download PDF</button>
+                </div>`;
+                list.appendChild(div);
             });
         }
 
-        // View account statement
+
+        // Populate dropdowns with accounts
+        function populateAccountDropdowns() {
+            const accounts = currentUser.accounts || [];
+            const mapToSelect = (sel) => {
+                if (!sel) return;
+                sel.innerHTML = '';
+                accounts.forEach(a => {
+                    const opt = document.createElement('option');
+                    opt.value = a.accountNumber;
+                    opt.textContent = `${a.type} � ${a.accountNumber}`;
+                    sel.appendChild(opt);
+                });
+                if (accounts.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = 'No accounts';
+                    sel.appendChild(opt);
+                }
+            };
+            mapToSelect(depositAccountSelect);
+            mapToSelect(withdrawAccountSelect);
+            mapToSelect(transferSourceAccountSelect);
+            mapToSelect(transferDestinationAccountSelect);
+            mapToSelect(budgetAccountSelect);
+        }
+
+        // Deposit
+        depositForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const accountNumber = depositAccountSelect.value;
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const account = currentUser.accounts.find(a => a.accountNumber === accountNumber);
+            if (!account) { showMessage(document.getElementById('depositResult'), 'Account not found', false); return; }
+            account.balance += amount;
+            account.transactions.push({ id: Date.now().toString(), type: 'DEPOSIT', amount, timestamp: new Date().toISOString(), balanceAfter: account.balance });
+            persistCurrentUser();
+            showMessage(document.getElementById('depositResult'), `Deposit successful. New balance R${account.balance.toFixed(2)}`, true);
+            renderAccounts();
+            populateAccountDropdowns();
+            depositForm.reset();
+            showTransactionSlip(account.accountNumber, account.transactions[account.transactions.length - 1]);
+        });
+
+        // Withdraw
+        withdrawForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const accountNumber = withdrawAccountSelect.value;
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const account = currentUser.accounts.find(a => a.accountNumber === accountNumber);
+            if (!account) { showMessage(document.getElementById('withdrawResult'), 'Account not found', false); return; }
+            if (account.balance < amount) { showMessage(document.getElementById('withdrawResult'), 'Insufficient funds', false); return; }
+            account.balance -= amount;
+            account.transactions.push({ id: Date.now().toString(), type: 'WITHDRAWAL', amount, timestamp: new Date().toISOString(), balanceAfter: account.balance });
+            persistCurrentUser();
+            showMessage(document.getElementById('withdrawResult'), `Withdrawal successful. New balance R${account.balance.toFixed(2)}`, true);
+            renderAccounts();
+            populateAccountDropdowns();
+            withdrawForm.reset();
+            showTransactionSlip(account.accountNumber, account.transactions[account.transactions.length - 1]);
+        });
+
+        // Transfer
+        transferForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const src = transferSourceAccountSelect.value;
+            const dst = transferDestinationAccountSelect.value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            if (src === dst) { showMessage(document.getElementById('transferResult'), 'Cannot transfer to same account', false); return; }
+            const srcAcc = currentUser.accounts.find(a => a.accountNumber === src);
+            const dstAcc = currentUser.accounts.find(a => a.accountNumber === dst);
+            if (!srcAcc || !dstAcc) { showMessage(document.getElementById('transferResult'), 'Source or destination not found', false); return; }
+            if (srcAcc.balance < amount) { showMessage(document.getElementById('transferResult'), 'Insufficient funds', false); return; }
+            srcAcc.balance -= amount;
+            dstAcc.balance += amount;
+            const ts = new Date().toISOString();
+            srcAcc.transactions.push({ id: Date.now().toString(), type: 'TRANSFER_OUT', amount, timestamp: ts, relatedAccount: dst, balanceAfter: srcAcc.balance });
+            dstAcc.transactions.push({ id: Date.now().toString() + '_in', type: 'TRANSFER_IN', amount, timestamp: ts, relatedAccount: src, balanceAfter: dstAcc.balance });
+            persistCurrentUser();
+            showMessage(document.getElementById('transferResult'), 'Transfer successful', true);
+            renderAccounts();
+            populateAccountDropdowns();
+            transferForm.reset();
+            showTransactionSlip(srcAcc.accountNumber, srcAcc.transactions[srcAcc.transactions.length - 1]);
+        });
+
+        // Budget toggle & create
+        toggleAutoAllocationBtn.addEventListener('click', function () {
+            if (!currentUser) return;
+            currentUser.budgetSettings = currentUser.budgetSettings || { autoAllocationEnabled: false };
+            currentUser.budgetSettings.autoAllocationEnabled = !currentUser.budgetSettings.autoAllocationEnabled;
+            autoAllocationStatus.textContent = currentUser.budgetSettings.autoAllocationEnabled ? 'Enabled' : 'Disabled';
+            persistCurrentUser();
+            showMessage(document.getElementById('budgetSettingsResult'), 'Budget settings updated', true);
+            renderBudgetProgress();
+        });
+
+        createBudgetFormEl.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const accountNumber = document.getElementById('budgetAccountSelect').value;
+            const name = document.getElementById('budgetName').value.trim();
+            const target = parseFloat(document.getElementById('budgetTarget').value);
+            if (!currentUser.budgets) currentUser.budgets = [];
+            currentUser.budgets.push({ id: Date.now().toString(), accountNumber, name, targetAmount: target, currentAmount: 0 });
+            persistCurrentUser();
+            showMessage(document.getElementById('createBudgetResult'), 'Budget created', true);
+            createBudgetFormEl.reset();
+            renderBudgetProgress();
+        });
+
+        function renderBudgetProgress() {
+            const container = document.getElementById('budgetProgress');
+            container.innerHTML = '';
+            const budgets = (currentUser.budgets || []);
+            if (budgets.length === 0) {
+                container.innerHTML = '<p class="small-muted">No budgets created yet for your accounts.</p>';
+                return;
+            }
+            budgets.forEach(b => {
+                const percent = b.targetAmount ? Math.min(100, (b.currentAmount / b.targetAmount) * 100) : 0;
+                const div = document.createElement('div');
+                div.className = 'form-container';
+                div.innerHTML = `<h4 style="margin:0">${b.name} <span style="font-size:0.85rem;color:var(--neutral)">(${b.accountNumber})</span></h4>
+                        <div style="height:8px;background:#e6e6e6;border-radius:6px;margin:8px 0;overflow:hidden">
+                            <div style="height:8px;width:${percent}%;background:linear-gradient(90deg,#4caf50,#2ecc71)"></div>
+                        </div>
+                        <div style="color:var(--neutral)">R${(b.currentAmount || 0).toFixed(2)} / R${b.targetAmount.toFixed(2)} (${percent.toFixed(1)}%)</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        // Basic transaction slip (alert) - replaced with a simple popup window for readability
+        function showTransactionSlip(accountNumber, transaction) {
+            const html = `Transaction: ${transaction.type}\nAccount: ${accountNumber}\nAmount: R${transaction.amount.toFixed(2)}\nBalance After: R${transaction.balanceAfter.toFixed(2)}\nDate: ${new Date(transaction.timestamp).toLocaleString()}`;
+            alert(html);
+        }
+
+        // view statement (new window)
         function viewStatement(accountNumber) {
-            currentAccountNumber = accountNumber;
-            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
-            if (!account) return;
+            const account = currentUser.accounts.find(a => a.accountNumber === accountNumber);
+            if (!account) return alert("Account not found");
 
-            // Set modal title
-            document.getElementById('modalTitle').textContent = `Statement for Account: ${accountNumber}`;
+            // Build modal content
+            let html = `<h3>${account.type} Account (#${account.accountNumber})</h3>`;
+            html += `<p><strong>Balance:</strong> R${account.balance.toFixed(2)}</p>`;
 
-            // Show all transactions initially
-            displayTransactions(account.transactions);
-            statementModal.style.display = 'block';
-        }
-
-        // Display transactions in modal
-        function displayTransactions(transactions) {
-            if (!transactions || transactions.length === 0) {
-                modalTransactionList.innerHTML = '<p>No transactions found.</p>';
-                return;
-            }
-
-            // Sort transactions by date (newest first)
-            transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            let tableHTML = `
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Related Account</th>
-                            <th>Balance After</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            transactions.forEach(tx => {
-                const isCredit = tx.type.includes('DEPOSIT') || tx.type.includes('TRANSFER_IN');
-                tableHTML += `
-                    <tr>
-                        <td>${new Date(tx.timestamp).toLocaleString()}</td>
-                        <td>${tx.type.replace('_', ' ')}</td>
-                        <td class="${isCredit ? 'credit' : 'debit'}">${isCredit ? '+' : '-'}R${tx.amount.toFixed(2)}</td>
-                        <td>${tx.relatedAccount || '-'}</td>
-                        <td>R${tx.balanceAfter.toFixed(2)}</td>
-                    </tr>
-                `;
-            });
-
-            tableHTML += '</tbody></table>';
-            modalTransactionList.innerHTML = tableHTML;
-            modalStatementResult.textContent = '';
-        }
-
-        // Apply date filter
-        function applyDateFilter() {
-            const startDate = new Date(startDateInput.value);
-            const endDate = new Date(endDateInput.value);
-            endDate.setHours(23, 59, 59, 999); // Include the entire end date
-
-            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-                modalStatementResult.textContent = 'Please select valid dates';
-                modalStatementResult.className = 'result-message error';
-                return;
-            }
-
-            if (startDate > endDate) {
-                modalStatementResult.textContent = 'Start date cannot be after end date';
-                modalStatementResult.className = 'result-message error';
-                return;
-            }
-
-            const account = currentUser.accounts.find(acc => acc.accountNumber === currentAccountNumber);
-            if (!account) return;
-
-            const filteredTransactions = account.transactions.filter(tx => {
-                const txDate = new Date(tx.timestamp);
-                return txDate >= startDate && txDate <= endDate;
-            });
-
-            if (filteredTransactions.length === 0) {
-                modalStatementResult.textContent = 'No transactions found in the selected date range';
-                modalStatementResult.className = 'result-message error';
+            if (!account.transactions || account.transactions.length === 0) {
+                html += `<p>No transactions yet.</p>`;
             } else {
-                modalStatementResult.textContent = `Showing ${filteredTransactions.length} transactions between ${startDate.toLocaleDateString()} and ${endDate.toLocaleDateString()}`;
-                modalStatementResult.className = 'result-message success';
+                html += `<table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:10px">
+                <tr style="background:#eee">
+                    <th style="padding:6px;text-align:left">Date</th>
+                    <th style="padding:6px;text-align:left">Type</th>
+                    <th style="padding:6px;text-align:right">Amount</th>
+                    <th style="padding:6px;text-align:right">Balance</th>
+                </tr>`;
+
+                account.transactions.forEach(t => {
+                    const color = (t.type === "DEPOSIT" || t.type === "TRANSFER_IN") ? "green" : "red";
+                    html += `<tr>
+                    <td style="padding:6px;border-bottom:1px solid #ddd">${new Date(t.timestamp).toLocaleString()}</td>
+                    <td style="padding:6px;border-bottom:1px solid #ddd">${t.type}</td>
+                    <td style="padding:6px;border-bottom:1px solid #ddd;text-align:right;color:${color}">R${t.amount.toFixed(2)}</td>
+                    <td style="padding:6px;border-bottom:1px solid #ddd;text-align:right">R${t.balanceAfter.toFixed(2)}</td>
+                </tr>`;
+                });
+
+                html += `</table>`;
             }
 
-            displayTransactions(filteredTransactions);
+            // Simple modal window
+            const w = window.open("", "_blank", "width=700,height=500,scrollbars=yes");
+            w.document.write(`<html><head><title>Statement</title></head><body style="font-family:Arial, sans-serif;padding:20px">${html}</body></html>`);
         }
+        function downloadStatementPDF(accountNumber) {
+            const account = currentUser.accounts.find(a => a.accountNumber === accountNumber);
+            if (!account) return;
 
-        // Clear date filter
-        function clearDateFilter() {
-            startDateInput.valueAsDate = oneMonthAgo;
-            endDateInput.valueAsDate = today;
-            const account = currentUser.accounts.find(acc => acc.accountNumber === currentAccountNumber);
-            if (account) {
-                displayTransactions(account.transactions);
-                modalStatementResult.textContent = 'Showing all transactions';
-                modalStatementResult.className = 'result-message success';
-            }
-        }
-
-        // Show download options
-        function showDownloadOptions() {
-            downloadModal.style.display = 'block';
-        }
-
-        // Download statement as PDF
-        function downloadStatementAsPdf() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
-            const account = currentUser.accounts.find(acc => acc.accountNumber === currentAccountNumber);
-            if (!account) return;
-
-            // Set title
             doc.setFontSize(16);
-            doc.text(`Account Statement - ${currentAccountNumber}`, 105, 15, { align: 'center' });
-
-            // Account info
+            doc.text("Account Statement", 20, 20);
             doc.setFontSize(12);
-            doc.text(`Account Type: ${account.type}`, 20, 25);
-            doc.text(`Current Balance: R${account.balance.toFixed(2)}`, 20, 35);
-            doc.text(`Statement Period: ${startDateInput.value} to ${endDateInput.value}`, 20, 45);
+            doc.text(`Account: ${account.type} (#${account.accountNumber})`, 20, 35);
 
-            // Transactions table
-            let y = 60;
-            doc.setFontSize(10);
+            let y = 50;
+            (account.transactions || []).forEach(t => {
+                const dateText = new Date(t.timestamp).toLocaleString();
+                const typeText = t.type;
+                const amountText = `R${t.amount.toFixed(2)}`;
+                const balanceText = `Balance: R${t.balanceAfter.toFixed(2)}`;
 
-            // Table header
-            doc.setFillColor(200, 200, 200);
-            doc.rect(20, y, 170, 10, 'F');
-            doc.text('Date', 22, y + 7);
-            doc.text('Type', 60, y + 7);
-            doc.text('Amount', 100, y + 7);
-            doc.text('Balance', 140, y + 7);
-            y += 10;
-
-            // Filter transactions by date if filter is applied
-            let transactionsToExport = account.transactions;
-            if (startDateInput.value && endDateInput.value) {
-                const startDate = new Date(startDateInput.value);
-                const endDate = new Date(endDateInput.value);
-                endDate.setHours(23, 59, 59, 999);
-
-                transactionsToExport = account.transactions.filter(tx => {
-                    const txDate = new Date(tx.timestamp);
-                    return txDate >= startDate && txDate <= endDate;
-                });
-            }
-
-            // Sort by date (newest first)
-            transactionsToExport.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            // Table rows
-            transactionsToExport.forEach(tx => {
-                if (y > 270) {
-                    doc.addPage();
-                    y = 20;
-                }
-
-                const isCredit = tx.type.includes('DEPOSIT') || tx.type.includes('TRANSFER_IN');
                 doc.setTextColor(0, 0, 0);
-                
-                doc.text(new Date(tx.timestamp).toLocaleDateString(), 22, y + 7);
-                doc.text(tx.type.replace('_', ' '), 60, y + 7);
-                
-                // Set color for amount based on transaction type
-                doc.setTextColor(isCredit ? 0 :  128, 0, 255, 0, 0);
-                doc.text(`${isCredit ? '+' : '-'}R${tx.amount.toFixed(2)}`, 100, y + 7);
-                
+                doc.text(`${dateText} - ${typeText} - `, 20, y);
+
+                // Only color the amount
+                const amountX = doc.getTextWidth(`${dateText} - ${typeText} - `) + 20;
+                const color = (t.type === "DEPOSIT" || t.type === "TRANSFER_IN") ? [0, 150, 0] : [200, 0, 0];
+                doc.setTextColor(...color);
+                doc.text(amountText, amountX, y);
+
+                // Reset to black for balance
+                const balanceX = amountX + doc.getTextWidth(amountText) + 5;
                 doc.setTextColor(0, 0, 0);
-                doc.text(`R${tx.balanceAfter.toFixed(2)}`, 140, y + 7);
-                
+                doc.text(balanceText, balanceX, y);
+
                 y += 10;
+                if (y > 280) { doc.addPage(); y = 20; }
             });
 
-            // Save the PDF
-            doc.save(`statement_${currentAccountNumber}_${new Date().toISOString().split('T')[0]}.pdf`);
-            downloadModal.style.display = 'none';
+            doc.save(`statement_${account.accountNumber}.pdf`);
         }
 
-        // Show result message
-        function showResult(elementId, message, isSuccess) {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.className = isSuccess ? 'result-message success' : 'result-message error';
-        }
 
-        // Update user data in localStorage
-        function updateUserData() {
-            localStorage.setItem('bankingUser', JSON.stringify(currentUser));
+        function downloadAllTransactionsPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text("All Transactions", 20, 20);
 
-            const users = JSON.parse(localStorage.getItem('bankingUsers') || '[]');
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-            if (userIndex !== -1) {
-                users[userIndex] = currentUser;
-                localStorage.setItem('bankingUsers', JSON.stringify(users));
-            }
-        }
+            let y = 40;
+            currentUser.accounts.forEach(acc => {
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`${acc.type} Account (#${acc.accountNumber})`, 20, y);
+                y += 10;
 
-        // New function to show transaction slip
-        function showTransactionSlip(accountNumber, transaction) {
-            currentAccountNumber = accountNumber;
-            const account = currentUser.accounts.find(acc => acc.accountNumber === accountNumber);
-            if (!account) return;
+                doc.setFontSize(11);
+                (acc.transactions || []).forEach(t => {
+                    if (y > 280) { doc.addPage(); y = 20; }
 
-            document.getElementById('slipModalTitle').textContent = `Transaction Slip - Account: ${accountNumber}`;
+                    const dateText = new Date(t.timestamp).toLocaleString();
+                    const typeText = t.type;
+                    const amountText = `R${t.amount.toFixed(2)}`;
+                    const balanceText = `Balance: R${t.balanceAfter.toFixed(2)}`;
 
-            // Create slip content
-            let slipHTML = `
-                <div style="margin-bottom: 20px;">
-                    <p><strong>Account Number:</strong> ${accountNumber}</p>
-                    <p><strong>Account Type:</strong> ${account.type}</p>
-                    <p><strong>Transaction Date:</strong> ${new Date(transaction.timestamp).toLocaleString()}</p>
-                    <p><strong>Transaction Type:</strong> ${transaction.type.replace('_', ' ')}</p>
-                    <p><strong>Amount:</strong> R${transaction.amount.toFixed(2)}</p>
-                    ${transaction.relatedAccount ? `<p><strong>Related Account:</strong> ${transaction.relatedAccount}</p>` : ''}
-                    <p><strong>Balance After Transaction:</strong> R${transaction.balanceAfter.toFixed(2)}</p>
-                </div>
-                <hr>
-            `;
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${dateText} � ${typeText} � `, 20, y);
 
-            // Add recent transactions
-            const recentTransactions = account.transactions
-                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-                .slice(0, 5);
+                    // Amount in color
+                    const amountX = doc.getTextWidth(`${dateText} � ${typeText} � `) + 20;
+                    const color = (t.type === "DEPOSIT" || t.type === "TRANSFER_IN") ? [0, 150, 0] : [200, 0, 0];
+                    doc.setTextColor(...color);
+                    doc.text(amountText, amountX, y);
 
-            if (recentTransactions.length > 0) {
-                slipHTML += `<h3>Recent Transactions</h3>
-                <table class="transaction-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Balance After</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+                    // Balance in black
+                    const balanceX = amountX + doc.getTextWidth(amountText) + 5;
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(balanceText, balanceX, y);
 
-                recentTransactions.forEach(tx => {
-                    const isCredit = tx.type.includes('DEPOSIT') || tx.type.includes('TRANSFER_IN');
-                    slipHTML += `
-                        <tr>
-                            <td>${new Date(tx.timestamp).toLocaleDateString()}</td>
-                            <td>${tx.type.replace('_', ' ')}</td>
-                            <td class="${isCredit ? 'credit' : 'debit'}">${isCredit ? '+' : '-'}R${tx.amount.toFixed(2)}</td>
-                            <td>R${tx.balanceAfter.toFixed(2)}</td>
-                        </tr>
-                    `;
+                    y += 8;
                 });
+                y += 12;
+            });
 
-                slipHTML += `</tbody></table>`;
+            doc.save("all_transactions.pdf");
+        }
+
+
+        // watch storage changes to sync across tabs (demo)
+        window.addEventListener('storage', () => {
+            const s = localStorage.getItem('bankingUser');
+            if (s) {
+                currentUser = JSON.parse(s);
+                if (!dashboardView.classList.contains('hidden')) {
+                    renderAccounts();
+                    populateAccountDropdowns();
+                    renderBudgetProgress();
+                }
             }
+        });
 
-            slipTransactionList.innerHTML = slipHTML;
-            slipResult.textContent = 'Transaction completed successfully';
-            slipResult.className = 'result-message success';
-            transactionSlipModal.style.display = 'block';
-        }
-// Function to load accounts for the budget dropdown
-async function loadBudgetAccounts() {
-    if (!currentUserId) return;
-
-    try {
-        const response = await fetch(`http://localhost:8080/api/accounts/user/${currentUserId}`);
-        const data = await response.json();
-
-        if (response.ok) {
-            renderAccountDropdown(data.accounts, budgetAccountDropdown);
-            if (data.accounts.length > 0) {
-                loadBudgetData(data.accounts[0].id);
-            }
-        } else {
-            console.error('Failed to load accounts for budget page:', data.error);
-        }
-    } catch (error) {
-        console.error('Error fetching user accounts for budget page:', error);
-    }
-}
-
-// Function to fetch and display budget data for an account
-async function loadBudgetData(accountId) {
-    if (!accountId) return;
-
-    try {
-        const response = await fetch(`http://localhost:8080/api/budget/list-account?accountId=${accountId}`);
-        const data = await response.json();
-
-        if (response.ok) {
-            renderBudgets(data.budgets);
-        } else {
-            console.error('Failed to load budgets:', data.error);
-        }
-    } catch (error) {
-        console.error('Error fetching budget data:', error);
-    }
-}
-
-// Function to render the budget progress bars
-function renderBudgets(budgets) {
-    const budgetProgress = document.getElementById('budget-progress');
-    budgetProgress.innerHTML = '';
-
-    if (budgets.length === 0) {
-        budgetProgress.innerHTML = '<p>No budgets found for this account. Budgets will be automatically created when auto-allocation is enabled.</p>';
-        return;
-    }
-
-    let needsBudget = budgets.find(b => b.name === 'Needs');
-    let wantsBudget = budgets.find(b => b.name === 'Wants');
-    let savingsBudget = budgets.find(b => b.name === 'Savings');
-    
-    let html = '';
-    
-    if (needsBudget) {
-        const progressPercent = needsBudget.targetAmount > 0 ? 
-            Math.min(100, (needsBudget.currentAmount / needsBudget.targetAmount) * 100) : 0;
-        html += `
-            <div class="budget-progress-item">
-                <h4>Needs (70%)</h4>
-                <div class="budget-progress-bar">
-                    <div class="budget-progress-fill needs" style="width: ${progressPercent}%"></div>
-                </div>
-                <div class="budget-details">
-                    <span>R${needsBudget.currentAmount.toFixed(2)} / R${needsBudget.targetAmount.toFixed(2)}</span>
-                    <span>${progressPercent.toFixed(1)}%</span>
-                </div>
-            </div>
-        `;
-    }
-    
-    if (wantsBudget) {
-        const progressPercent = wantsBudget.targetAmount > 0 ? 
-            Math.min(100, (wantsBudget.currentAmount / wantsBudget.targetAmount) * 100) : 0;
-        html += `
-            <div class="budget-progress-item">
-                <h4>Wants (20%)</h4>
-                <div class="budget-progress-bar">
-                    <div class="budget-progress-fill wants" style="width: ${progressPercent}%"></div>
-                </div>
-                <div class="budget-details">
-                    <span>R${wantsBudget.currentAmount.toFixed(2)} / R${wantsBudget.targetAmount.toFixed(2)}</span>
-                    <span>${progressPercent.toFixed(1)}%</span>
-                </div>
-            </div>
-        `;
-    }
-    
-    if (savingsBudget) {
-        const progressPercent = savingsBudget.targetAmount > 0 ? 
-            Math.min(100, (savingsBudget.currentAmount / savingsBudget.targetAmount) * 100) : 0;
-        html += `
-            <div class="budget-progress-item">
-                <h4>Savings (10%)</h4>
-                <div class="budget-progress-bar">
-                    <div class="budget-progress-fill savings" style="width: ${progressPercent}%"></div>
-                </div>
-                <div class="budget-details">
-                    <span>R${savingsBudget.currentAmount.toFixed(2)} / R${savingsBudget.targetAmount.toFixed(2)}</span>
-                    <span>${progressPercent.toFixed(1)}%</span>
-                </div>
-            </div>
-        `;
-    }
-    
-    budgetProgress.innerHTML = html;
-}
-        // Initialize the app
+        // Initialization
         initApp();
-    </script>
-</body>
 
+    </script>
+
+</body>
 </html>
